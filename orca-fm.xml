@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<featureModel>
+	<properties>
+		<graphics key="legendposition" value="19,28"/>
+		<graphics key="legendautolayout" value="false"/>
+		<graphics key="showshortnames" value="false"/>
+		<graphics key="layout" value="horizontal"/>
+		<graphics key="showcollapsedconstraints" value="true"/>
+		<graphics key="legendhidden" value="false"/>
+		<graphics key="layoutalgorithm" value="1"/>
+	</properties>
+	<struct>
+		<and abstract="true" mandatory="true" name="orca-soc">
+			<graphics key="collapsed" value="false"/>
+			<and abstract="true" mandatory="true" name="hardware">
+				<and mandatory="true" name="HFRiscV-pcore">
+					<feature name="multiplier"/>
+				</and>
+			</and>
+			<and abstract="true" mandatory="true" name="software">
+				<and abstract="true" mandatory="true" name="runnables">
+					<feature mandatory="true" name="PID"/>
+					<feature mandatory="true" name="EKF"/>
+				</and>
+				<and abstract="true" mandatory="true" name="os">
+					<feature mandatory="true" name="HellfireOS"/>
+				</and>
+				<alt abstract="true" mandatory="true" name="definitions">
+					<feature name="sefp"/>
+					<feature name="int-arith"/>
+				</alt>
+				<and abstract="true" mandatory="true" name="libraries">
+					<feature name="hf-fplib"/>
+					<feature name="matrix"/>
+				</and>
+			</and>
+			<and abstract="true" mandatory="true" name="tools">
+				<and mandatory="true" name="gcc8-riscv32-unknown">
+					<alt mandatory="true" name="-march">
+						<feature name="rv32i"/>
+						<feature name="rv32im"/>
+					</alt>
+					<feature name="-Dfloat"/>
+				</and>
+			</and>
+		</and>
+	</struct>
+	<constraints>
+		<rule>
+			<conj>
+				<imp>
+					<var>multiplier</var>
+					<var>rv32im</var>
+				</imp>
+				<imp>
+					<var>multiplier</var>
+					<var>rv32im</var>
+				</imp>
+			</conj>
+		</rule>
+		<rule>
+			<conj>
+				<imp>
+					<var>sefp</var>
+					<var>hf-fplib</var>
+				</imp>
+				<imp>
+					<var>hf-fplib</var>
+					<var>sefp</var>
+				</imp>
+			</conj>
+		</rule>
+		<rule>
+			<imp>
+				<var>sefp</var>
+				<var>-Dfloat</var>
+			</imp>
+		</rule>
+	</constraints>
+</featureModel>
