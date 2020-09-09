@@ -67,6 +67,15 @@
       </taskSchedulers>
     </operatingSystems>
   </osModel>
+  <stimuliModel>
+    <stimuli xsi:type="am:PeriodicStimulus" xmi:id="no-name?type=PeriodicStimulus" name="">
+      <recurrence value="20" unit="ms"/>
+      <jitter xsi:type="am:TimeConstant"/>
+    </stimuli>
+  </stimuliModel>
+  <eventModel/>
+  <constraintsModel/>
+  <propertyConstraintsModel/>
   <mappingModel>
     <taskAllocation task="PID_0?type=Task" scheduler="HFOS_Sched_core0?type=TaskScheduler"/>
     <taskAllocation task="EKF_0?type=Task" scheduler="HFOS_Sched_core1?type=TaskScheduler"/>
