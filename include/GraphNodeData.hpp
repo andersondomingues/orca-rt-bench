@@ -32,7 +32,10 @@
 namespace Orca::Graph {
 
 struct GraphNodeData{
-    uint32_t executionTime;
+    uint32_t id;
+    std::string name;
+
+    float executionTime;
 
     inline GraphNodeData(){
         executionTime = 0;

@@ -24,32 +24,21 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef GRAPH_HPP_
-#define GRAPH_HPP_
+#ifndef GRAPHFILEHANDLER_HPP_
+#define GRAPHFILEHANDLER_HPP_
 
-#include <list>
 #include <string>
 
-#include "GraphEdge.hpp"
-#include "GraphNode.hpp"
+#include "Graph.hpp"
 
 namespace Orca::Graph {
 
-class Graph{
- private:
-    std::list<GraphEdge*>* edges;
-    std::list<GraphNode*>* nodes;
-
+class GraphFileHandler {
  public:
-    Graph();
-    ~Graph();
-    int addNode(GraphNode* node);
-    int removeNode(GraphNode* node);
-    int addEdge(GraphEdge* edge);
-    std::list<GraphNode*>* getNodes();
-    std::list<GraphEdge*>* getEdges();
+    static Graph* parseFromFile(std::string filename);
+    static void saveToFile(std::string filename, Graph* g);
 };
 
 }  // namespace Orca::Graph
 
-#endif  // GRAPH_HPP_
+#endif  // GRAPHFILEHANDLER_HPP_

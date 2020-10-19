@@ -36,6 +36,10 @@ GraphEdge::GraphEdge() {
     this->data = GraphEdgeData();
 }
 
+GraphEdge::~GraphEdge() {
+    // nothing
+}
+
 GraphNode* GraphEdge::getFrom() {
     return this->from;
 }
@@ -46,6 +50,14 @@ GraphNode* GraphEdge::getTo() {
 
 GraphEdgeData* GraphEdge::getData() {
     return &(this->data);
+}
+
+void GraphEdge::setFrom(GraphNode* node) {
+    this->from = node;
+}
+
+void GraphEdge::setTo(GraphNode* node) {
+    this->to = node;
 }
 
 }  // namespace Orca::Graph

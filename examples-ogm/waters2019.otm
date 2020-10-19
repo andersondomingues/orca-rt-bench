@@ -30,13 +30,6 @@
 # be found at 
 #################################################################################
 
-[meta]
-version 0.1
-author Anderson Domingues
-email ti.andersondomingues@gmail.com
-
-#################################################################################
-
 [nodes]
 #id task                          exetime
 01  CANbus_polling                0.5998720
@@ -108,4 +101,4 @@ email ti.andersondomingues@gmail.com
 
 04       05     0
 
-[oef]
+#################################################################################

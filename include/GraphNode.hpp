@@ -44,6 +44,7 @@ class GraphNode{
     GraphNodeData data;
  public:
     GraphNode();
+    ~GraphNode();
     std::list<GraphEdge>* getTo();
     std::list<GraphEdge>* getFrom();
     GraphNodeData* getData();

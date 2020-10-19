@@ -36,6 +36,10 @@ GraphNode::GraphNode() {
     this->data = GraphNodeData();
 }
 
+GraphNode::~GraphNode() {
+    // nothing
+}
+
 GraphNodeData* GraphNode::getData() {
     return &(this->data);
 }

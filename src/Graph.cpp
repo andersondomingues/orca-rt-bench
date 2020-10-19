@@ -47,27 +47,37 @@ int Graph::removeNode(GraphNode* node) {
     return 0;
 }
 
-GraphEdge* Graph::connect(GraphNode* nodea, GraphNode* nodeb) {
-    // todo
-    return nullptr;
-}
+int Graph::addEdge(GraphEdge* edge) {
+    GraphNode* node;
+    std::list<GraphNode*>* nodes = this->getNodes();
+    std::list<GraphNode*>::iterator i;
 
-int Graph::disconnect(GraphEdge* edge) {
-    // todo
-    return 0;
-}
+    int mark = 0;
+    for (i = nodes->begin(); i != nodes->end(); i++) {
+        if (*i == edge->getTo())
+            mark++;
+        if (*i == edge->getFrom())
+            mark++;
+    }
 
-int Graph::disconnect(GraphNode* nodea, GraphNode* nodeb) {
-    // todo
-    return 0;
+    if (mark == 2) {
+        this->edges->push_front(edge);
+        return 0;
+    }
+
+    return 1;
 }
 
 std::list<GraphNode*>* Graph::getNodes() {
     return this->nodes;
 }
 
-std::list<GraphEdge*>* Graph::getEdge() {
+std::list<GraphEdge*>* Graph::getEdges() {
     return this->edges;
+}
+
+Graph::~Graph() {
+    // nothing
 }
 
 }  // namespace Orca::Graph

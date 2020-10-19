@@ -44,6 +44,7 @@ class GraphEdge{
 
  public:
     GraphEdge();
+    ~GraphEdge();
     void setFrom(GraphNode* node);
     void setTo(GraphNode* node);
     GraphNode* getFrom();
