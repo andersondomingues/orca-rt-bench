@@ -31,7 +31,7 @@
 #################################################################################
 
 [nodes]
-#id task                          exetime
+#id task                          exectime
 01  CANbus_polling                0.5998720
 02  Lidar_Grabber                 10.8680044
 03  EFK                           4.4294795

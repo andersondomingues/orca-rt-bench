@@ -2,12 +2,6 @@
 #include "Graph.hpp"
 #include "GraphFileHandler.hpp"
 
-void singleCoreEdf(Orca::Graph::Graph* graph) {
-
-    // update deadlines
-
-}
-
 void printGraph(Orca::Graph::Graph* graph) {
     std::list<Orca::Graph::GraphNode*>* nodes = graph->getNodes();
     std::list<Orca::Graph::GraphNode*>::iterator i;
@@ -45,5 +39,4 @@ int main(int argc, char** argv) {
     }
 
     printGraph(graph);
-    singleCoreEdf(graph);
 }
