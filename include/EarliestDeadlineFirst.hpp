@@ -24,21 +24,36 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef GRAPHFILEHANDLER_HPP_
-#define GRAPHFILEHANDLER_HPP_
+#ifndef EARLIESTDEADLINEFIRST_HPP_
+#define EARLIESTDEADLINEFIRST_HPP_
 
 #include <string>
+#include <queue>
 
 #include "Graph.hpp"
+#include "TaskControlBlock.hpp"
+#include "TaskSchedulingAlgorithm.hpp"
 
-namespace Orca::Graph {
+namespace Orca::Task {
 
-class GraphFileHandler {
+class EarliestDeadlineFirst : public TaskSchedulingAlgorithm {
  public:
-    static Graph* parseFromFile(std::string filename);
-    static void saveToFile(std::string filename, Graph* g);
+    EarliestDeadlineFirst();
+    ~EarliestDeadlineFirst();
+
+    void Schedule(
+        Orca::Graph::Graph* graph,
+        std::priority_queue<TaskControlBlock>* ready,
+        std::priority_queue<TaskControlBlock>* blocked,
+        std::priority_queue<TaskControlBlock>* running) override;
+
+    void Dispatch(
+        Orca::Graph::Graph* graph,
+        std::priority_queue<TaskControlBlock>* ready,
+        std::priority_queue<TaskControlBlock>* blocked,
+        std::priority_queue<TaskControlBlock>* running) override;
 };
 
-}  // namespace Orca::Graph
+}  // namespace Orca::Task
 
-#endif  // GRAPHFILEHANDLER_HPP_
+#endif  // EARLIESTDEADLINEFIRST_HPP_

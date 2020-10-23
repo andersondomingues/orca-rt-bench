@@ -24,37 +24,35 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef TASKSCHEDULER_HPP_
-#define TASKSCHEDULER_HPP_
+#ifndef TASKSCHEDULEREVENT_HPP_
+#define TASKSCHEDULEREVENT_HPP_
 
 #include <string>
-#include <queue>
-// #include <priority_queue>
-#include "TaskControlBlock.hpp"
-#include "TaskSchedulingAlgorithm.hpp"
-#include "TaskSchedulerEvent.hpp"
+#include <sstream>
 
-#define NUM_TASKS 30
+#include "GraphNodeData.hpp"
+#include "TaskControlBlock.hpp"
 
 namespace Orca::Task {
 
-class TaskScheduler {
- private:
-    uint32_t ticks_to_sim;
-    uint32_t current_time;
+struct TaskSchedulerEvent{
+    uint32_t time;
+    TaskControlBlock data;
 
-    std::priority_queue<TaskSchedulerEvent>* running;
-    std::priority_queue<TaskSchedulerEvent>* ready;
-    std::priority_queue<TaskSchedulerEvent>* blocked;
+    inline TaskSchedulerEvent() {
+        // required by vectors
+    }
 
- public:
-    TaskScheduler();
-    ~TaskScheduler();
+    inline TaskSchedulerEvent(uint32_t time, TaskControlBlock data) {
+        this->time = time;
+        this->data = data;
+    }
 
-    void Sim(
-      TaskSchedulingAlgorithm* algo, Orca::Graph::Graph* graph, uint32_t ticks);
+    inline bool operator<(const TaskSchedulerEvent& e) const{
+        return time < e.time;
+    }
 };
 
 }  // namespace Orca::Task
 
-#endif  // TASKSCHEDULER_HPP_
+#endif  // TASKSCHEDULEREVENT_HPP_

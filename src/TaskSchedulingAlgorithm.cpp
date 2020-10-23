@@ -24,37 +24,16 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef TASKSCHEDULER_HPP_
-#define TASKSCHEDULER_HPP_
-
-#include <string>
-#include <queue>
-// #include <priority_queue>
-#include "TaskControlBlock.hpp"
 #include "TaskSchedulingAlgorithm.hpp"
-#include "TaskSchedulerEvent.hpp"
-
-#define NUM_TASKS 30
 
 namespace Orca::Task {
 
-class TaskScheduler {
- private:
-    uint32_t ticks_to_sim;
-    uint32_t current_time;
+TaskSchedulingAlgorithm::TaskSchedulingAlgorithm() {
+    //
+}
 
-    std::priority_queue<TaskSchedulerEvent>* running;
-    std::priority_queue<TaskSchedulerEvent>* ready;
-    std::priority_queue<TaskSchedulerEvent>* blocked;
-
- public:
-    TaskScheduler();
-    ~TaskScheduler();
-
-    void Sim(
-      TaskSchedulingAlgorithm* algo, Orca::Graph::Graph* graph, uint32_t ticks);
-};
+TaskSchedulingAlgorithm::~TaskSchedulingAlgorithm() {
+    //
+}
 
 }  // namespace Orca::Task
-
-#endif  // TASKSCHEDULER_HPP_

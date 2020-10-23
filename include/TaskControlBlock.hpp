@@ -34,12 +34,12 @@ namespace Orca::Task {
 enum class TaskStatus{
     FINISHED,
     RUNNING,
-    READ,
+    READY,
 };
 
 struct TaskControlBlock{
     uint32_t id;
-    uint32_t status;
+    TaskStatus status;
 
     float last_release;
     float next_deadline;
