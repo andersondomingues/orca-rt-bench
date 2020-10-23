@@ -79,7 +79,6 @@ void TaskScheduler::Sim(
 
     // simulate until reach number of ticks
     while (this->ticks_to_sim > 0) {
-
         TaskSchedulerEvent e;
         e = this->running->top();
         this->running->pop();
