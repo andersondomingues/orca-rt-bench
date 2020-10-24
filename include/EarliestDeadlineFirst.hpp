@@ -28,10 +28,10 @@
 #define EARLIESTDEADLINEFIRST_HPP_
 
 #include <string>
-#include <queue>
+#include <list>
 
 #include "Graph.hpp"
-#include "TaskControlBlock.hpp"
+#include "TaskSchedulerEvent.hpp"
 #include "TaskSchedulingAlgorithm.hpp"
 
 namespace Orca::Task {
@@ -42,16 +42,14 @@ class EarliestDeadlineFirst : public TaskSchedulingAlgorithm {
     ~EarliestDeadlineFirst();
 
     void Schedule(
-        Orca::Graph::Graph* graph,
-        std::priority_queue<TaskControlBlock>* ready,
-        std::priority_queue<TaskControlBlock>* blocked,
-        std::priority_queue<TaskControlBlock>* running) override;
+        std::list<TaskSchedulerEvent>* ready,
+        std::list<TaskSchedulerEvent>* blocked,
+        std::list<TaskSchedulerEvent>* running) override;
 
     void Dispatch(
-        Orca::Graph::Graph* graph,
-        std::priority_queue<TaskControlBlock>* ready,
-        std::priority_queue<TaskControlBlock>* blocked,
-        std::priority_queue<TaskControlBlock>* running) override;
+        std::list<TaskSchedulerEvent>* ready,
+        std::list<TaskSchedulerEvent>* blocked,
+        std::list<TaskSchedulerEvent>* running) override;
 };
 
 }  // namespace Orca::Task

@@ -48,8 +48,12 @@ struct TaskSchedulerEvent{
         this->data = data;
     }
 
-    inline bool operator<(const TaskSchedulerEvent& e) const{
+    inline bool operator<(const TaskSchedulerEvent& e) const {
         return time < e.time;
+    }
+
+    inline bool operator==(const TaskSchedulerEvent& e) const {
+        return time == e.time && data == e.data;
     }
 };
 

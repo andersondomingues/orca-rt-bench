@@ -31,37 +31,37 @@
 #################################################################################
 
 [nodes]
-#id task                          exectime
-01  CANbus_polling                0.5998720
-02  Lidar_Grabber                 10.8680044
-03  EFK                           4.4294795
-04  Planner                       12.4367667
-05  DASM                          1.2999980
+#id task                          cp_denver     cp_a57        cp_gpu     deadline period
+01  CANbus_polling                0.5998720     0.5996800     0          10       10
+02  Lidar_Grabber                 10.8680044    13.6600044    0          33       33
+03  EFK                           4.4294795     4.7596700     0          15       15
+04  Planner                       12.4367667    13.2419132    0          15       15
+05  DASM                          1.2999980     1.8599950     0          5        5
 
-06  PRE_SFM_gpu_POST_A            3.1775760
-07  SFM_A                         0.00000500064
-08  PRE_SFM_gpu_POST_B            3.5322630
-09  SFM_B                         0.00000006
-10  S_SFM                         29.5015000
+06  PRE_SFM_gpu_POST_A            3.1775760     3.7296640     0          33       33
+07  SFM_A                         0.00000500064 0.00000500064 0          33       33
+08  PRE_SFM_gpu_POST_B            3.5322630     4.1737010     0          33       33
+09  SFM_B                         0.00000006    0.00000006    0          33       33
+10  S_SFM                         29.5015000    27.8116900    7.90000    33       33
 
-11  PRE_lane_detection_gpu_POST_A 3.5256885
-12  Lane_Detection_A              0.000005
-13  S_Lane_Detection              42.2378240
-14  PRE_lane_detection_gpu_POST_B 4.0997480
-15  Lane_Detection_B              0.00000000064
+11  PRE_lane_detection_gpu_POST_A 3.5256885     3.9759655     0          66       66
+12  Lane_Detection_A              0.000005      0.000005      0          66       66
+13  S_Lane_Detection              42.2378240    51.0445600    27.3333333 66       66
+14  PRE_lane_detection_gpu_POST_B 4.0997480     4.2568400     0          66       66
+15  Lane_Detection_B              0.00000000064 0.00000000064 0          66       66
 
-16  PRE_localization_gpu_POST_A   8.2157478
-17  PRE_localization_gpu_POST_B   3.5322580
-18  Localization_A                0.0000037525
-19  S_Localization                294.8078710
-20  Localization_B                0.0000000075
+16  PRE_localization_gpu_POST_A   8.2157478     8.9393638     0          400      400
+17  PRE_localization_gpu_POST_B   3.5322580     4.1736960     0          400      400
+18  Localization_A                0.0000037525  0.0000037525  0          400      400  
+19  S_Localization                294.8078710   0.0000000075  124.00000  400      400
+20  Localization_B                0.0000000075  387.4196775   0          400      400
 
-21  PRE_detection_gpu_POST_A      3.1772680
-22  Detection_A                   0.000005
-23  S_Detection                   42.2378240
-24  AsyncOffloadingCost_A         2500.0
-25  PRE_detection_gpu_POST_B      0.9080019
-26  Detection_B                   0.000001875
+21  PRE_detection_gpu_POST_A      3.1772680     3.6895650     0          200      200
+22  Detection_A                   0.000005      0.000005      0          200      200
+23  S_Detection                   42.2378240    51.0445600    27.3333333 200      200
+24  AsyncOffloadingCost_A         2500.0        2500.0        0          200      200
+25  PRE_detection_gpu_POST_B      0.9080019     1.0200019     0          200      200
+26  Detection_B                   0.000001875   0.000001875   0          200      200
 
 #################################################################################
 

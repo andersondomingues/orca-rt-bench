@@ -83,7 +83,11 @@ Graph* GraphFileHandler::parseFromFile(std::string filename) {
                 GraphNode* node = new GraphNode();
                 ss >> node->getData()->id;
                 ss >> node->getData()->name;
-                ss >> node->getData()->executionTime;
+                ss >> node->getData()->cpDever;
+                ss >> node->getData()->cpA56;
+                ss >> node->getData()->cpGPU;
+                ss >> node->getData()->deadline;
+                ss >> node->getData()->period;
                 graph->addNode(node);
             } break;
 

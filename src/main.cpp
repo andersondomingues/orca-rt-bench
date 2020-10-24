@@ -40,7 +40,7 @@ void printGraph(Orca::Graph::Graph* graph) {
     for (i = nodes->begin(); i != nodes->end(); i++) {
         data = *((*i)->getData());
         std::cout << data.id << "\t" << data.name << " "
-            << "\t\t\t" << data.executionTime << std::endl;
+            << "\t\t\t" << data.cpDever << std::endl;
     }
 
     std::list<Orca::Graph::GraphEdge*>* edges = graph->getEdges();
@@ -69,9 +69,10 @@ int main(int argc, char** argv) {
 
     // printGraph(graph);
 
-    Orca::Task::TaskScheduler* scheduler = new Orca::Task::TaskScheduler();
+    Orca::Task::TaskScheduler* scheduler
+        = new Orca::Task::TaskScheduler(graph);
     Orca::Task::TaskSchedulingAlgorithm* edf
         = new Orca::Task::EarliestDeadlineFirst();
 
-    scheduler->Sim(edf, graph, 100);
+    scheduler->Sim(edf, 100);
 }

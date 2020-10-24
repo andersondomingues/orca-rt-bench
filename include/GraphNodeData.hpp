@@ -35,11 +35,11 @@ struct GraphNodeData{
     uint32_t id;
     std::string name;
 
-    float executionTime;
-
-    inline GraphNodeData(){
-        executionTime = 0;
-    }
+    float cpDever;
+    float cpA56;
+    float cpGPU;
+    float deadline;
+    float period;
 };
 
 }  // namespace Orca::Graph

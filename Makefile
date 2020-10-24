@@ -17,7 +17,7 @@ TARGET_DEPS := \
 # Add optimization and include flags to the compilation. Compilation 
 # optimizations favor performance over code size.
 CXX := g++
-CXXFLAGS := -O3 -march=native -mtune=native -std=c++17 -fmax-errors=5
+CXXFLAGS := -O3 -march=native -mtune=native -std=c++17 -fmax-errors=5 -ggdb
 
 all: $(OUTPUTDIR)/$(LIBNAME) $(OUTPUTDIR)/main.o
 	$(CXX) $(CXXFLAGS) -I$(HEADERDIR) $(OUTPUTDIR)/main.o -o $(OUTPUTDIR)/test.exe -Lbin -lorcagraph

@@ -47,6 +47,12 @@ struct TaskControlBlock{
     float period;  // ms  < frequency that task is released
     float deadline;  // ms < maximum allowed execution time
     float capacity;  // ms < required processor time
+
+    std::string name;
+
+    inline bool operator==(const TaskControlBlock& b) const {
+        return id == b.id;
+    }
 };
 
 }  // namespace Orca::Task

@@ -28,8 +28,8 @@
 #define TASKSCHEDULER_HPP_
 
 #include <string>
-#include <queue>
-// #include <priority_queue>
+#include <list>
+
 #include "TaskControlBlock.hpp"
 #include "TaskSchedulingAlgorithm.hpp"
 #include "TaskSchedulerEvent.hpp"
@@ -41,18 +41,20 @@ namespace Orca::Task {
 class TaskScheduler {
  private:
     uint32_t ticks_to_sim;
-    uint32_t current_time;
+    float current_time;
 
-    std::priority_queue<TaskSchedulerEvent>* running;
-    std::priority_queue<TaskSchedulerEvent>* ready;
-    std::priority_queue<TaskSchedulerEvent>* blocked;
+    TaskControlBlock _clock_irq;
+
+    std::list<TaskSchedulerEvent>* running;
+    std::list<TaskSchedulerEvent>* ready;
+    std::list<TaskSchedulerEvent>* blocked;
 
  public:
-    TaskScheduler();
+    explicit TaskScheduler(Orca::Graph::Graph* graph);
     ~TaskScheduler();
 
     void Sim(
-      TaskSchedulingAlgorithm* algo, Orca::Graph::Graph* graph, uint32_t ticks);
+      TaskSchedulingAlgorithm* algo, uint32_t ticks);
 };
 
 }  // namespace Orca::Task

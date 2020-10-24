@@ -28,11 +28,11 @@
 #define TASKSCHEDULINGALGORITHM_HPP_
 
 #include <stdint.h>
-#include <queue>
+#include <list>
 
 #include "Graph.hpp"
 #include "TaskSchedulingAlgorithm.hpp"
-#include "TaskControlBlock.hpp"
+#include "TaskSchedulerEvent.hpp"
 
 namespace Orca::Task {
 
@@ -42,16 +42,14 @@ class TaskSchedulingAlgorithm {
     ~TaskSchedulingAlgorithm();
 
     virtual void Schedule(
-        Orca::Graph::Graph* graph,
-        std::priority_queue<TaskControlBlock>* ready,
-        std::priority_queue<TaskControlBlock>* blocked,
-        std::priority_queue<TaskControlBlock>* running) = 0;
+        std::list<TaskSchedulerEvent>* ready,
+        std::list<TaskSchedulerEvent>* blocked,
+        std::list<TaskSchedulerEvent>* running) = 0;
 
     virtual void Dispatch(
-        Orca::Graph::Graph* graph,
-        std::priority_queue<TaskControlBlock>* ready,
-        std::priority_queue<TaskControlBlock>* blocked,
-        std::priority_queue<TaskControlBlock>* running) = 0;
+        std::list<TaskSchedulerEvent>* ready,
+        std::list<TaskSchedulerEvent>* blocked,
+        std::list<TaskSchedulerEvent>* running) = 0;
 };
 
 }  // namespace Orca::Task
