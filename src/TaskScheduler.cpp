@@ -88,6 +88,8 @@ TaskScheduler::~TaskScheduler() {
     delete this->running;
     delete this->ready;
     delete this->blocked;
+
+    delete this->_clock_irq;
 }
 
 /**
@@ -112,78 +114,121 @@ void TaskScheduler::Sim(TaskSchedulingAlgorithm* algo, uint32_t ticks) {
     this->ready->clear();
 
     // stores events in a priority queue (sorted by time)
-    std::priority_queue<TaskSchedulerEvent> events
-        = std::priority_queue<TaskSchedulerEvent>();
+    std::priority_queue<TaskSchedulerEvent*> events
+        = std::priority_queue<TaskSchedulerEvent*>();
 
     // add the scheduler to the priotity queue. Since it is
     // the only event in the queue, it should run first
     _clock_irq->next_deadline = 0;
-    events.push(TaskSchedulerEvent(0, _clock_irq));
+    events.push(new TaskSchedulerEvent(0, _clock_irq));
+
+    TaskSchedulerEvent *eTop, *eBottom, *eNext;
 
     // simulate the system until reach the number of ticks
     while (this->ticks_to_sim-- > 0) {
         // get event from the top of the queue (which is the
         // nearest in time)
-        TaskSchedulerEvent e = events.top();
+        eTop = events.top();
         events.pop();
 
         // update simulation clock
-        this->current_time = e.time;
+        this->current_time = eTop->time;
 
         // next event is the scheduling interruption
-        if (e.data->id == -1) {
-            // get the next event from the simulation queue
-            TaskSchedulerEvent timedOutTask = events.top();
-            events.pop();
+        if (eTop->data->id == -1) {
+            // no task is scheduled during the first irq, so we must
+            // test before treating that task
+            if (events.size() != 0) {
+                // get the next event from the simulation queue
+                eBottom = events.top();
+                events.pop();
 
-            // task timed out, update its capacity
-            timedOutTask.data->current_capacity +=
-                timedOutTask.data->next_deadline - this->current_time;
+                // task timed out, update its capacity
+                eBottom->data->current_capacity +=
+                    eBottom->data->next_deadline - this->current_time;
 
-            // check whether the task has enough capacity to run again
-            if (e.data->capacity == e.data->current_capacity) {
-                e.data->current_capacity = 0;
-                e.data->next_deadline += e.data->deadline;
-                this->ready->push_back(timedOutTask.data);
+                // check whether the task has enough capacity to run again
+                if (eBottom->data->capacity
+                 == eBottom->data->current_capacity) {
+                    eBottom->data->current_capacity = 0;
+                    eBottom->data->next_deadline += eBottom->data->deadline;
+                    this->ready->push_back(eBottom->data);
+                } else {
+                    this->blocked->push_back(eBottom->data);
+                }
+
+            // in case of the first schedule, instantiate a new
+            // event to do be used for the scheduled tasks
             } else {
-                this->blocked->push_back(timedOutTask.data);
+                eBottom = new TaskSchedulerEvent(0, nullptr);
             }
 
             // remove task from the executing queue
-            this->running->remove(timedOutTask.data);
+            this->running->remove(eBottom->data);
 
             // add scheduling event back to the queue
-            _clock_irq->deadline += _clock_irq->deadline;
-            events.push(TaskSchedulerEvent(
-                _clock_irq->next_deadline, _clock_irq));
+            eTop->data->next_deadline += eTop->data->deadline;
+            eTop->time = this->current_time + eTop->data->deadline;
+            events.push(eTop);
+
+            eNext = eBottom;
 
         // next event is a task finishing
         } else {
             // task finished, reset capacity, update deadline
             // and add it to the blocked list (end of capacity)
-            e.data->capacity = 0;
-            e.data->next_deadline += e.data->deadline;
+            eTop->data->capacity = 0;
+            eTop->data->next_deadline += eTop->data->deadline;
 
-            this->running->remove(e.data);
-            this->blocked->push_back(e.data);
+            this->running->remove(eTop->data);
+            this->blocked->push_back(eTop->data);
+
+            eNext = eTop;
         }
 
         // process blocked tasks
         for (i = this->blocked->begin(); i != this->blocked->end(); i++) {
             this->ready->push_back(*i);
         }
+
         blocked->clear();
 
         // call scheduler to sort the ready queue
         algo->Schedule(this->ready);
 
         // add current task to the running list
-        events.push(TaskSchedulerEvent(
-            this->current_time + this->ready->front()->current_capacity,
-            this->ready->front()));
+        eNext->time =
+            this->current_time + this->ready->front()->current_capacity;
+        eNext->data = this->ready->front();
+        events.push(eNext);
 
         // removed current event from the ready queue
+        this->running->push_back(this->ready->front());
         this->ready->remove(this->ready->front());
+
+        // print list contents
+        std::cout << "=====================" << std::endl;
+        std::cout << "--------- running:" << std::endl;
+        for (i = this->running->begin(); i != this->running->end(); i++) {
+            std::cout << (*i)->toString() << std::endl;
+        }
+        std::cout << "--------- ready:" << std::endl;
+        for (i = this->ready->begin(); i != this->ready->end(); i++) {
+            std::cout << (*i)->toString() << std::endl;
+        }
+        std::cout << "--------- blocked:" << std::endl;
+        for (i = this->blocked->begin(); i != this->blocked->end(); i++) {
+            std::cout << (*i)->toString() << std::endl;
+        }
+
+        std::cout << std::flush;
+    }
+
+    // event queue cleanup
+    while (events.size() > 0) {
+        TaskSchedulerEvent* e = events.top();
+        events.pop();
+        delete e;
     }
 }
 

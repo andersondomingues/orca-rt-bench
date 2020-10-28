@@ -77,7 +77,16 @@ std::list<GraphEdge*>* Graph::getEdges() {
 }
 
 Graph::~Graph() {
-    // nothing
+    std::list<GraphNode*>::iterator i;
+    for (i = this->nodes->begin(); i != this->nodes->end(); i++)
+        delete *i;
+
+    std::list<GraphEdge*>::iterator j;
+    for (j = this->edges->begin(); j != this->edges->end(); j++)
+        delete *j;
+
+    delete this->nodes;
+    delete this->edges;
 }
 
 }  // namespace Orca::Graph

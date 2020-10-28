@@ -45,9 +45,9 @@ void EarliestDeadlineFirst::Schedule(std::list<TaskControlBlock*>* r) {
             return e1->next_deadline < e2->next_deadline;
     });
 
-    for (std::list<TaskControlBlock*>::iterator i
-     = r->begin(); i != r->end(); i++)
-        std::cout << *i << std::endl;
+    // for (std::list<TaskControlBlock*>::iterator i
+    //  = r->begin(); i != r->end(); i++)
+    //     std::cout << *i << std::endl;
 }
 
 }  // namespace Orca::Task

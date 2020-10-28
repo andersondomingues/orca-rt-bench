@@ -76,4 +76,8 @@ int main(int argc, char** argv) {
         = new Orca::Task::EarliestDeadlineFirst();
 
     scheduler->Sim(edf, 10);
+
+    delete graph;
+    delete scheduler;
+    delete edf;
 }
