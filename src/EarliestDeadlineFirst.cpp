@@ -27,7 +27,6 @@
 #include <iostream>
 #include "EarliestDeadlineFirst.hpp"
 
-
 namespace Orca::Task {
 
 EarliestDeadlineFirst::EarliestDeadlineFirst() {
@@ -38,41 +37,17 @@ EarliestDeadlineFirst::~EarliestDeadlineFirst() {
     //
 }
 
-bool earlist_deadline_first(
-    const TaskSchedulerEvent& e1, const TaskSchedulerEvent& e2) {
-    return e1.data.deadline < e2.data.deadline;
-}
-
 // schedule -> sort tasks
-void EarliestDeadlineFirst::Schedule(
-    std::list<TaskSchedulerEvent>* ready,
-    std::list<TaskSchedulerEvent>* blocked,
-    std::list<TaskSchedulerEvent>* running) {
-
+void EarliestDeadlineFirst::Schedule(std::list<TaskControlBlock*>* r) {
     // sort list of ready tasks by earliest deadline
-    ready->sort([]
-        (const TaskSchedulerEvent& e1, const TaskSchedulerEvent& e2) {
-            return e1.data.next_deadline < e2.data.next_deadline;
+    r->sort([]
+        (const TaskControlBlock* e1, const TaskControlBlock* e2) {
+            return e1->next_deadline < e2->next_deadline;
     });
 
-    std::list<TaskSchedulerEvent>::iterator i;
-    for (i = ready->begin(); i != ready->end(); i++) {
-        std::cout << "\t" << (*i).data.next_deadline
-            << ":" << (*i).data.name << std::endl;
-    }
-}
-
-// send tasks to corresponding cpu
-void EarliestDeadlineFirst::Dispatch(
-    std::list<TaskSchedulerEvent>* ready,
-    std::list<TaskSchedulerEvent>* blocked,
-    std::list<TaskSchedulerEvent>* running) {
-    //
-    TaskSchedulerEvent e;
-    e = ready->front();
-
-    ready->remove(e);
-    running->push_front(e);
+    for (std::list<TaskControlBlock*>::iterator i
+     = r->begin(); i != r->end(); i++)
+        std::cout << *i << std::endl;
 }
 
 }  // namespace Orca::Task

@@ -43,11 +43,11 @@ class TaskScheduler {
     uint32_t ticks_to_sim;
     float current_time;
 
-    TaskControlBlock _clock_irq;
+    TaskControlBlock* _clock_irq;
 
-    std::list<TaskSchedulerEvent>* running;
-    std::list<TaskSchedulerEvent>* ready;
-    std::list<TaskSchedulerEvent>* blocked;
+    std::list<TaskControlBlock*>* running;
+    std::list<TaskControlBlock*>* ready;
+    std::list<TaskControlBlock*>* blocked;
 
  public:
     explicit TaskScheduler(Orca::Graph::Graph* graph);

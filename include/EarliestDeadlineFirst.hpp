@@ -41,15 +41,7 @@ class EarliestDeadlineFirst : public TaskSchedulingAlgorithm {
     EarliestDeadlineFirst();
     ~EarliestDeadlineFirst();
 
-    void Schedule(
-        std::list<TaskSchedulerEvent>* ready,
-        std::list<TaskSchedulerEvent>* blocked,
-        std::list<TaskSchedulerEvent>* running) override;
-
-    void Dispatch(
-        std::list<TaskSchedulerEvent>* ready,
-        std::list<TaskSchedulerEvent>* blocked,
-        std::list<TaskSchedulerEvent>* running) override;
+    void Schedule(std::list<TaskControlBlock*>* r);
 };
 
 }  // namespace Orca::Task

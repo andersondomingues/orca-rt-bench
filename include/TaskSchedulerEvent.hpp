@@ -37,13 +37,13 @@ namespace Orca::Task {
 
 struct TaskSchedulerEvent{
     uint32_t time;
-    TaskControlBlock data;
+    TaskControlBlock* data;
 
     inline TaskSchedulerEvent() {
         // required by vectors
     }
 
-    inline TaskSchedulerEvent(uint32_t time, TaskControlBlock data) {
+    inline TaskSchedulerEvent(uint32_t time, TaskControlBlock* data) {
         this->time = time;
         this->data = data;
     }

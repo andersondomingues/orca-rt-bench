@@ -41,15 +41,7 @@ class TaskSchedulingAlgorithm {
     TaskSchedulingAlgorithm();
     ~TaskSchedulingAlgorithm();
 
-    virtual void Schedule(
-        std::list<TaskSchedulerEvent>* ready,
-        std::list<TaskSchedulerEvent>* blocked,
-        std::list<TaskSchedulerEvent>* running) = 0;
-
-    virtual void Dispatch(
-        std::list<TaskSchedulerEvent>* ready,
-        std::list<TaskSchedulerEvent>* blocked,
-        std::list<TaskSchedulerEvent>* running) = 0;
+    virtual void Schedule(std::list<TaskControlBlock*>* r) = 0;
 };
 
 }  // namespace Orca::Task

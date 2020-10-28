@@ -11,13 +11,14 @@ TARGET_DEPS := \
 	$(OUTPUTDIR)/Graph.o \
 	$(OUTPUTDIR)/GraphFileHandler.o \
 	$(OUTPUTDIR)/TaskScheduler.o \
+	$(OUTPUTDIR)/TaskControlBlock.o \
 	$(OUTPUTDIR)/TaskSchedulingAlgorithm.o \
 	$(OUTPUTDIR)/EarliestDeadlineFirst.o
 	
 # Add optimization and include flags to the compilation. Compilation 
 # optimizations favor performance over code size.
 CXX := g++
-CXXFLAGS := -O3 -march=native -mtune=native -std=c++17 -fmax-errors=5 -ggdb
+CXXFLAGS := -O3 -march=native -mtune=native -std=c++17 -fmax-errors=5 -ggdb -fsanitize=address
 
 all: $(OUTPUTDIR)/$(LIBNAME) $(OUTPUTDIR)/main.o
 	$(CXX) $(CXXFLAGS) -I$(HEADERDIR) $(OUTPUTDIR)/main.o -o $(OUTPUTDIR)/test.exe -Lbin -lorcagraph

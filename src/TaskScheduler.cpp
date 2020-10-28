@@ -25,118 +25,165 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
 #include <iostream>
+#include <queue>
 
 #include "TaskScheduler.hpp"
 #include "TaskSchedulerEvent.hpp"
 #include "GraphNode.hpp"
 #include "GraphNodeData.hpp"
 
-// clock interrupt each 5ms
-#define SYSTEM_IRQ_PERIOD 5
+// clock interrupt each 300
+#define SYSTEM_IRQ_PERIOD 300
+#define SYSTEM_IRQ_LIMIT  10
 
 namespace Orca::Task {
 
+/**
+ * Default constructor.
+ * @brief Internal lists (blocked, ready, and running) 
+ * initialization and instantiation of graph data into
+ * tcbs.
+ * @param graph A task graph instance containing tasks'
+ * information; at least id, name, period, capacity and
+ * deadline are required.
+ */
 TaskScheduler::TaskScheduler(Orca::Graph::Graph* graph) {
-    // initialize lists
-    this->running = new std::list<TaskSchedulerEvent>();
-    this->ready = new std::list<TaskSchedulerEvent>();
-    this->blocked = new std::list<TaskSchedulerEvent>();
+    // Initialize lists
+    this->running = new std::list<TaskControlBlock*>();
+    this->ready = new std::list<TaskControlBlock*>();
+    this->blocked = new std::list<TaskControlBlock*>();
 
-    // schedule all tasks. Create task block and add all tasks to the
-    // ready queue. In that queue, tasks are sorted by their deadlines
-    // (earliest first).
-    std::list<Orca::Graph::GraphNode*>::iterator i;
+    // For each task in the graph, create a new task control block
+    // and add it to the blocked list; all tasks started as blocked
+    // due to the scheduler calculate which tasks go to the ready
+    // list during each schedule.
+    std::list<Orca::Graph::GraphNode*>::iterator i = graph->getNodes()->begin();
+    for (; i != graph->getNodes()->end(); i++) {
+        TaskControlBlock* block = new TaskControlBlock(
+            (*i)->getData()->id,
+            (*i)->getData()->name,
+            (*i)->getData()->period,
+            (*i)->getData()->cpDever,
+            (*i)->getData()->deadline);
 
-    // for each task in the graph, create a new task control block
-    for (i = graph->getNodes()->begin(); i != graph->getNodes()->end(); i++) {
-        TaskControlBlock block;
-        block.id = (*i)->getData()->id;
-        block.name = (*i)->getData()->name;
-        block.deadline = (*i)->getData()->deadline;
-        block.capacity = (*i)->getData()->cpDever;
-        block.period   = (*i)->getData()->period;
-        block.next_deadline = block.deadline;
-
-        // push these tasks to the "ready" list
-        this->ready->push_back(TaskSchedulerEvent(block.deadline, block));
-
-        std::cout << "[" << block.id << "]" << block.name << "(d:"
-            << block.deadline << ", c:"
-            << block.capacity << ", p:"
-            << block.period << ")" << std::endl;
+        this->blocked->push_back(block);
+        std::cout << block->toString() << std::endl;
     }
 
-    // schedule clock interruption
-    _clock_irq.id = 0;
-    _clock_irq.name = "CLOCK_IRQ";
-    _clock_irq.capacity = SYSTEM_IRQ_PERIOD;
-    _clock_irq.deadline = SYSTEM_IRQ_PERIOD;
-    _clock_irq.period = SYSTEM_IRQ_PERIOD;
-    _clock_irq.next_deadline = SYSTEM_IRQ_PERIOD;
-
-    // add clock irq to running list (clock irq is always running)
-    this->running->push_back(TaskSchedulerEvent(SYSTEM_IRQ_PERIOD, _clock_irq));
-
-    std::cout << "[" << _clock_irq.id << "]" << _clock_irq.name << "(d:"
-        << _clock_irq.deadline << ", c:"
-        << _clock_irq.capacity << ", p:"
-        << _clock_irq.period << ")" << std::endl;
+    _clock_irq = new TaskControlBlock(-1, "_clock_irq",
+        SYSTEM_IRQ_PERIOD, SYSTEM_IRQ_PERIOD, SYSTEM_IRQ_PERIOD);
 }
 
+/**
+ * Destructor.
+ * @brief We erase all tcb from memory, then erase lists
+ */
 TaskScheduler::~TaskScheduler() {
+    std::list<Orca::Task::TaskControlBlock*>::iterator i;
+
+    for (i = running->begin(); i != running->end(); i++) delete (*i);
+    for (i = ready->begin(); i != ready->end(); i++) delete (*i);
+    for (i = blocked->begin(); i != blocked->end(); i++) delete (*i);
+
     delete this->running;
     delete this->ready;
     delete this->blocked;
 }
 
+/**
+ * Scheduler simulation
+ * @brief We simulate the scheduler for <ticks> ticks 
+ * using the provided <algo> scheduling algorithm.
+ * @param algo Scheduling algorithm to be used
+ * @param ticks Number of ticks to simulate. See <SYSTEM_IRQ_PERIOD>
+ */
 void TaskScheduler::Sim(TaskSchedulingAlgorithm* algo, uint32_t ticks) {
+    // reset timers
     this->ticks_to_sim = ticks;
+    this->current_time = 0;
 
-    // simulate until reach number of ticks
-    while (this->ticks_to_sim > 0) {
-        // sort running task by their deadline
-        this->running->sort([]
-            (TaskSchedulerEvent& a, TaskSchedulerEvent& b){
-                return a.data.next_deadline < b.data.next_deadline;
-        });
+    // move all tasks to the blocked list
+    std::list<TaskControlBlock*>::iterator i;
+    for (i = this->running->begin(); i != this->running->end(); i++)
+        this->blocked->push_back(*i);
+    for (i = this->ready->begin(); i != this->ready->end(); i++)
+        this->blocked->push_back(*i);
+    this->running->clear();
+    this->ready->clear();
 
-        // get first object
-        TaskSchedulerEvent e;
-        e = this->running->front();
+    // stores events in a priority queue (sorted by time)
+    std::priority_queue<TaskSchedulerEvent> events
+        = std::priority_queue<TaskSchedulerEvent>();
 
-        // empty running list and update exec time for all executing tasks
-        std::list<TaskSchedulerEvent>::iterator i;
-        for (i = this->running->begin(); i != this->running->end(); i++) {
-            TaskSchedulerEvent e = *i;
-            if (e.data.id != 0) {
-                e.data.next_deadline += e.data.deadline;
-                ready->push_front(e);
+    // add the scheduler to the priotity queue. Since it is
+    // the only event in the queue, it should run first
+    _clock_irq->next_deadline = 0;
+    events.push(TaskSchedulerEvent(0, _clock_irq));
+
+    // simulate the system until reach the number of ticks
+    while (this->ticks_to_sim-- > 0) {
+        // get event from the top of the queue (which is the
+        // nearest in time)
+        TaskSchedulerEvent e = events.top();
+        events.pop();
+
+        // update simulation clock
+        this->current_time = e.time;
+
+        // next event is the scheduling interruption
+        if (e.data->id == -1) {
+            // get the next event from the simulation queue
+            TaskSchedulerEvent timedOutTask = events.top();
+            events.pop();
+
+            // task timed out, update its capacity
+            timedOutTask.data->current_capacity +=
+                timedOutTask.data->next_deadline - this->current_time;
+
+            // check whether the task has enough capacity to run again
+            if (e.data->capacity == e.data->current_capacity) {
+                e.data->current_capacity = 0;
+                e.data->next_deadline += e.data->deadline;
+                this->ready->push_back(timedOutTask.data);
+            } else {
+                this->blocked->push_back(timedOutTask.data);
             }
+
+            // remove task from the executing queue
+            this->running->remove(timedOutTask.data);
+
+            // add scheduling event back to the queue
+            _clock_irq->deadline += _clock_irq->deadline;
+            events.push(TaskSchedulerEvent(
+                _clock_irq->next_deadline, _clock_irq));
+
+        // next event is a task finishing
+        } else {
+            // task finished, reset capacity, update deadline
+            // and add it to the blocked list (end of capacity)
+            e.data->capacity = 0;
+            e.data->next_deadline += e.data->deadline;
+
+            this->running->remove(e.data);
+            this->blocked->push_back(e.data);
         }
 
-        // update current time
-        this->current_time = this->current_time + e.data.capacity;
-
-        // empty running list
-        this->running->clear();
-
-        // call scheduler
-        algo->Schedule(ready, blocked, running);
-
-        // dispatch next job to the running queue
-        algo->Dispatch(ready, blocked, running);
-
-        // if last event is clock, set clock to next deadline
-        if (e.data.id == 0) {
-            _clock_irq.next_deadline = this->current_time + _clock_irq.deadline;
-            this->ticks_to_sim--;  // decrease the number of ticks to sim
+        // process blocked tasks
+        for (i = this->blocked->begin(); i != this->blocked->end(); i++) {
+            this->ready->push_back(*i);
         }
+        blocked->clear();
 
-        // update next clock event and add clock interruption
-        this->running->push_front(
-            TaskSchedulerEvent(_clock_irq.next_deadline, _clock_irq));
+        // call scheduler to sort the ready queue
+        algo->Schedule(this->ready);
 
-        std::cout << this->current_time << "\t\t" << e.data.name << std::endl;
+        // add current task to the running list
+        events.push(TaskSchedulerEvent(
+            this->current_time + this->ready->front()->current_capacity,
+            this->ready->front()));
+
+        // removed current event from the ready queue
+        this->ready->remove(this->ready->front());
     }
 }
 

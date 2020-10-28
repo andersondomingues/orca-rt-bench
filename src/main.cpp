@@ -57,7 +57,8 @@ void printGraph(Orca::Graph::Graph* graph) {
 }
 
 int main(int argc, char** argv) {
-    std::string filename = "examples-ogm/waters2019.otm";
+    // std::string filename = "examples-ogm/waters2019.otm";
+    std::string filename = "examples-ogm/foundations-table3.2.otm";
 
     Orca::Graph::Graph* graph;
     graph = Orca::Graph::GraphFileHandler::parseFromFile(filename);
@@ -74,5 +75,5 @@ int main(int argc, char** argv) {
     Orca::Task::TaskSchedulingAlgorithm* edf
         = new Orca::Task::EarliestDeadlineFirst();
 
-    scheduler->Sim(edf, 100);
+    scheduler->Sim(edf, 10);
 }
