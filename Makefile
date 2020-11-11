@@ -5,23 +5,31 @@ OUTPUTDIR :=bin
 # Name of the package
 LIBNAME := liborcagraph.a
 
-TARGET_DEPS := \
-	$(OUTPUTDIR)/GraphNode.o \
-	$(OUTPUTDIR)/GraphEdge.o \
-	$(OUTPUTDIR)/Graph.o \
-	$(OUTPUTDIR)/GraphFileHandler.o \
-	$(OUTPUTDIR)/TaskScheduler.o \
-	$(OUTPUTDIR)/TaskControlBlock.o \
-	$(OUTPUTDIR)/TaskSchedulingAlgorithm.o \
-	$(OUTPUTDIR)/EarliestDeadlineFirst.o
-	
+#TARGET_DEPS := \
+#	$(OUTPUTDIR)/GraphNode.o \
+#	$(OUTPUTDIR)/GraphEdge.o \
+#	$(OUTPUTDIR)/Graph.o \
+#	$(OUTPUTDIR)/GraphFileHandler.o \
+#	$(OUTPUTDIR)/SimulationEngine.o \
+#	$(OUTPUTDIR)/SystemEvent.o \
+#	$(OUTPUTDIR)/SystemSimulation.o \
+#	$(OUTPUTDIR)/EarliestDeadlineFirst.o
+TARGET_DEPS := $(wildcard $(SOURCEDIR)/*.cpp)
+TARGET_DEPS := $(subst .cpp,.o, $(TARGET_DEPS))
+TARGET_DEPS := $(subst $(SOURCEDIR), $(OUTPUTDIR), $(TARGET_DEPS))
+
 # Add optimization and include flags to the compilation. Compilation 
 # optimizations favor performance over code size.
-CXX := g++
-CXXFLAGS := -O3 -march=native -mtune=native -std=c++17 -fmax-errors=5 -ggdb -fsanitize=address
+#CXX := g++
+CXX := clang++
+CXXFLAGS := -std=c++17 -ferror-limit=5
+#fmax-errors=5 
+CXXFLAGS += -fsanitize=address -ggdb
+#CXXFLAGS += -O3 -march=native -mtune=native 
 
 all: $(OUTPUTDIR)/$(LIBNAME) $(OUTPUTDIR)/main.o
-	$(CXX) $(CXXFLAGS) -I$(HEADERDIR) $(OUTPUTDIR)/main.o -o $(OUTPUTDIR)/test.exe -Lbin -lorcagraph
+	@$(CXX) $(CXXFLAGS) -I$(HEADERDIR) $(OUTPUTDIR)/main.o -o $(OUTPUTDIR)/test.exe -Lbin -lorcagraph
+	@echo "done."
 	
 #pack file into a static library to be used later
 $(OUTPUTDIR)/$(LIBNAME): $(TARGET_DEPS)
