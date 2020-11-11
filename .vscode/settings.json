@@ -43,12 +43,15 @@
         "sstream": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "cinttypes": "cpp"
     },
     "cpplint.filters": [
         "-legal/copyright"
     ],
     "C_Cpp.default.includePath": [
         "/home/adomingues/gaph/orca-modeling/include"
-    ]
+    ],
+    "cpplint.cpplintPath": "/home/adomingues/.local/bin/cpplint",
+    "c-cpp-flylint.clang.standard": ["c++2a"]
 }
