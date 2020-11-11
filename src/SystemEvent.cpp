@@ -24,39 +24,35 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef TASKSCHEDULEREVENT_HPP_
-#define TASKSCHEDULEREVENT_HPP_
+#include <SystemEvent.hpp>
 
-#include <string>
-#include <sstream>
+namespace OrcaSeer::Simulation {
 
-#include "GraphNodeData.hpp"
-#include "TaskControlBlock.hpp"
+bool SystemEvent::operator<(const SystemEvent& event) const {
+    return this->time < event.time;
+}
 
-namespace Orca::Task {
+bool SystemEvent::operator==(const SystemEvent& e) const {
+    return this->time == e.time && this->type == e.type;
+}
 
-struct TaskSchedulerEvent{
-    uint32_t time;
-    TaskControlBlock* data;
+std::string SystemEvent::toString() {
+    std::stringstream ss;
+    ss << this->time << ":";
+    return ss.str();
+}
 
-    inline TaskSchedulerEvent() {
-        // required by vectors
-    }
+SystemEvent::SystemEvent() {
+    this->time = 0;
+}
 
-    inline TaskSchedulerEvent(uint32_t time, TaskControlBlock* data) {
-        this->time = time;
-        this->data = data;
-    }
+SystemEvent::~SystemEvent() {
+    //
+}
 
-    inline bool operator<(const TaskSchedulerEvent& e) const {
-        return time < e.time;
-    }
+SystemEvent::SystemEvent(uint32_t time, SystemEventType type) {
+    this->time = time;
+    this->type = type;
+}
 
-    inline bool operator==(const TaskSchedulerEvent& e) const {
-        return time == e.time && data == e.data;
-    }
-};
-
-}  // namespace Orca::Task
-
-#endif  // TASKSCHEDULEREVENT_HPP_
+}  // namespace OrcaSeer::Simulation
