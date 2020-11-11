@@ -28,7 +28,7 @@
 
 #include <sstream>
 
-namespace Orca::Task {
+namespace OrcaSeer::Task {
 
 inline bool TaskControlBlock::operator==(const TaskControlBlock& b) const {
     return this->id == b.id;
@@ -41,15 +41,21 @@ TaskControlBlock::TaskControlBlock(uint32_t id, std::string name,
     this->period = period;
     this->capacity = capacity;
     this->deadline = deadline;
+
+    this->current_capacity = 0;
+    this->next_deadline = this->deadline;
 }
 
 std::string TaskControlBlock::toString() {
     std::stringstream ss;
-    ss << "[" << id << "]" << name << "(d:"
-        << deadline << ", c:"
-        << capacity << ", p:"
-        << period << ")";
+    ss << "[" << id << "]" << name
+        << ", p:" << period
+        << ", c:" << capacity
+        << ", d:" << deadline
+
+        << ", cc:" << current_capacity
+        << ", nd:" << next_deadline;
     return ss.str();
 }
 
-}  // namespace Orca::Task
+}  // namespace OrcaSeer::Task
