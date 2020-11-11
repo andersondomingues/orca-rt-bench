@@ -27,7 +27,7 @@
 #include <iostream>
 #include "EarliestDeadlineFirst.hpp"
 
-namespace Orca::Task {
+namespace OrcaSeer::Task {
 
 EarliestDeadlineFirst::EarliestDeadlineFirst() {
     // add all tasks to the tlb
@@ -44,10 +44,6 @@ void EarliestDeadlineFirst::Schedule(std::list<TaskControlBlock*>* r) {
         (const TaskControlBlock* e1, const TaskControlBlock* e2) {
             return e1->next_deadline < e2->next_deadline;
     });
-
-    // for (std::list<TaskControlBlock*>::iterator i
-    //  = r->begin(); i != r->end(); i++)
-    //     std::cout << *i << std::endl;
 }
 
-}  // namespace Orca::Task
+}  // namespace OrcaSeer::Task

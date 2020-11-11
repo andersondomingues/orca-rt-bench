@@ -24,26 +24,24 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef TASKSCHEDULINGALGORITHM_HPP_
-#define TASKSCHEDULINGALGORITHM_HPP_
+#ifndef SCHEDULINGALGORITHM_HPP_
+#define SCHEDULINGALGORITHM_HPP_
 
 #include <stdint.h>
 #include <list>
 
-#include "Graph.hpp"
-#include "TaskSchedulingAlgorithm.hpp"
-#include "TaskSchedulerEvent.hpp"
+#include "TaskControlBlock.hpp"
 
-namespace Orca::Task {
+namespace OrcaSeer::Task {
 
-class TaskSchedulingAlgorithm {
+class SchedulingAlgorithm {
  public:
-    TaskSchedulingAlgorithm();
-    ~TaskSchedulingAlgorithm();
+    // SchedulingAlgorithm();
+    virtual ~SchedulingAlgorithm() {}
 
-    virtual void Schedule(std::list<TaskControlBlock*>* r) = 0;
+    virtual void Schedule(std::list<TaskControlBlock*>* list) = 0;
 };
 
-}  // namespace Orca::Task
+}  // namespace OrcaSeer::Task
 
-#endif  // TASKSCHEDULINGALGORITHM_HPP_
+#endif  // SCHEDULINGALGORITHM_HPP_

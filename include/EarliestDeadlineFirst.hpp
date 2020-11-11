@@ -31,12 +31,11 @@
 #include <list>
 
 #include "Graph.hpp"
-#include "TaskSchedulerEvent.hpp"
-#include "TaskSchedulingAlgorithm.hpp"
+#include "SchedulingAlgorithm.hpp"
 
-namespace Orca::Task {
+namespace OrcaSeer::Task {
 
-class EarliestDeadlineFirst : public TaskSchedulingAlgorithm {
+class EarliestDeadlineFirst : public SchedulingAlgorithm {
  public:
     EarliestDeadlineFirst();
     ~EarliestDeadlineFirst();
@@ -44,6 +43,6 @@ class EarliestDeadlineFirst : public TaskSchedulingAlgorithm {
     void Schedule(std::list<TaskControlBlock*>* r);
 };
 
-}  // namespace Orca::Task
+}  // namespace OrcaSeer::Task
 
 #endif  // EARLIESTDEADLINEFIRST_HPP_
