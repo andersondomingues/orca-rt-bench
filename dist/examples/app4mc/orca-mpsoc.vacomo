@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vacomo:VariableComponentModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:vacomo="http://itea.amalthea.org/variability/0.7.0/Vacomo" name="orca-mpsoc">
+  <system>
+    <variationPoints>
+      <variants/>
+    </variationPoints>
+  </system>
+</vacomo:VariableComponentModel>

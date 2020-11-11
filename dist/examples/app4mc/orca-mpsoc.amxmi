@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<am:Amalthea xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:am="http://app4mc.eclipse.org/amalthea/0.9.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <swModel>
+    <tasks xmi:id="PID_0?type=Task" name="PID_0" multipleTaskActivationLimit="0"/>
+    <tasks xmi:id="EKF_0?type=Task" name="EKF_0" multipleTaskActivationLimit="0"/>
+    <runnables xmi:id="PID?type=Runnable" name="PID" callback="false" service="false"/>
+    <runnables xmi:id="EFK?type=Runnable" name="EFK" callback="false" service="false"/>
+  </swModel>
+  <hwModel>
+    <definitions xsi:type="am:MemoryDefinition" xmi:id="NI_recv_buffer?type=MemoryDefinition" name="NI_recv_buffer" memoryType="SRAM">
+      <size value="1" unit="kbit"/>
+      <accessLatency xsi:type="am:DiscreteValueConstant" value="1"/>
+    </definitions>
+    <definitions xsi:type="am:MemoryDefinition" xmi:id="NI_send_buffer?type=MemoryDefinition" name="NI_send_buffer" memoryType="SRAM">
+      <size value="1" unit="kbit"/>
+      <accessLatency xsi:type="am:DiscreteValueConstant" value="1"/>
+    </definitions>
+    <definitions xsi:type="am:MemoryDefinition" xmi:id="PLM?type=MemoryDefinition" name="PLM" memoryType="SRAM">
+      <size value="32" unit="Mbit"/>
+      <accessLatency xsi:type="am:DiscreteValueConstant" value="1"/>
+    </definitions>
+    <definitions xsi:type="am:ProcessingUnitDefinition" xmi:id="HFRisc-V+core?type=ProcessingUnitDefinition" name="HFRisc-V core" puType="CPU"/>
+    <structures xmi:id="ORCA-SoC?type=HwStructure" name="ORCA-SoC" structureType="SoC">
+      <structures xmi:id="Tile-0-%280%2C0%29-extif?type=HwStructure" name="Tile-0-(0,0)-extif">
+        <ports xmi:id="Tile-0-%280%2C0%29-extif/NORTH?type=HwPort" name="NORTH" bitWidth="16" priority="0" portInterface="custom"/>
+        <ports xmi:id="Tile-0-%280%2C0%29-extif/SOUTH?type=HwPort" name="SOUTH" bitWidth="0" priority="0"/>
+        <ports xmi:id="Tile-0-%280%2C0%29-extif/EAST?type=HwPort" name="EAST" bitWidth="0" priority="0"/>
+        <ports xmi:id="Tile-0-%280%2C0%29-extif/WEST?type=HwPort" name="WEST" bitWidth="0" priority="0"/>
+      </structures>
+      <structures xmi:id="Tile-1-%280%2C1%29-pe?type=HwStructure" name="Tile-1-(0,1)-pe" structureType="Cluster">
+        <ports xmi:id="Tile-1-%280%2C1%29-pe/NORTH?type=HwPort" name="NORTH" bitWidth="0" priority="0"/>
+        <ports xmi:id="Tile-1-%280%2C1%29-pe/SOUTH?type=HwPort" name="SOUTH" bitWidth="0" priority="0"/>
+        <ports xmi:id="Tile-1-%280%2C1%29-pe/EAST?type=HwPort" name="EAST" bitWidth="0" priority="0"/>
+        <ports xmi:id="Tile-1-%280%2C1%29-pe/WEST?type=HwPort" name="WEST" bitWidth="0" priority="0"/>
+      </structures>
+      <structures xmi:id="Tile-2-%281%2C0%29-pe?type=HwStructure" name="Tile-2-(1,0)-pe">
+        <ports xmi:id="Tile-2-%281%2C0%29-pe/NORTH?type=HwPort" name="NORTH" bitWidth="0" priority="0"/>
+        <ports xmi:id="Tile-2-%281%2C0%29-pe/SOUTH?type=HwPort" name="SOUTH" bitWidth="0" priority="0"/>
+        <ports xmi:id="Tile-2-%281%2C0%29-pe/EAST?type=HwPort" name="EAST" bitWidth="0" priority="0"/>
+        <ports xmi:id="Tile-2-%281%2C0%29-pe/WEST?type=HwPort" name="WEST" bitWidth="0" priority="0"/>
+      </structures>
+      <structures xmi:id="Tile-3-%281%2C1%29-unused?type=HwStructure" name="Tile-3-(1,1)-unused">
+        <ports xmi:id="Tile-3-%281%2C1%29-unused/NORTH?type=HwPort" name="NORTH" bitWidth="0" priority="0"/>
+        <ports xmi:id="Tile-3-%281%2C1%29-unused/SOUTH?type=HwPort" name="SOUTH" bitWidth="0" priority="0"/>
+        <ports xmi:id="Tile-3-%281%2C1%29-unused/EAST?type=HwPort" name="EAST" bitWidth="0" priority="0"/>
+        <ports xmi:id="Tile-3-%281%2C1%29-unused/WEST?type=HwPort" name="WEST" bitWidth="0" priority="0"/>
+      </structures>
+      <structures xmi:id="Sensor+Provider?type=HwStructure" name="Sensor Provider" structureType="System">
+        <ports xmi:id="Sensor+Provider/Ethernet?type=HwPort" name="Ethernet" bitWidth="16" priority="0" portInterface="custom"/>
+      </structures>
+      <connections xmi:id="ORCA-SoC/NoC_0?type=HwConnection" name="NoC_0" port1="Tile-0-%280%2C0%29-extif/NORTH?type=HwPort" port2="Tile-2-%281%2C0%29-pe/SOUTH?type=HwPort"/>
+      <connections xmi:id="ORCA-SoC/NoC_1?type=HwConnection" name="NoC_1" port1="Tile-0-%280%2C0%29-extif/EAST?type=HwPort" port2="Tile-1-%280%2C1%29-pe/WEST?type=HwPort"/>
+      <connections xmi:id="ORCA-SoC/NoC_2?type=HwConnection" name="NoC_2" port1="Tile-3-%281%2C1%29-unused/WEST?type=HwPort" port2="Tile-2-%281%2C0%29-pe/EAST?type=HwPort"/>
+      <connections xmi:id="ORCA-SoC/NoC_3?type=HwConnection" name="NoC_3" port1="Tile-3-%281%2C1%29-unused/SOUTH?type=HwPort" port2="Tile-1-%280%2C1%29-pe/NORTH?type=HwPort"/>
+    </structures>
+    <domains xsi:type="am:FrequencyDomain" xmi:id="no-name?type=FrequencyDomain" name="" clockGating="false">
+      <defaultValue value="2.0" unit="MHz"/>
+    </domains>
+  </hwModel>
+  <osModel>
+    <operatingSystems name="HellfireOS">
+      <taskSchedulers xmi:id="HFOS_Sched_core0?type=TaskScheduler" name="HFOS_Sched_core0">
+        <schedulingAlgorithm xsi:type="am:EarliestDeadlineFirst"/>
+      </taskSchedulers>
+      <taskSchedulers xmi:id="HFOS_Sched_core1?type=TaskScheduler" name="HFOS_Sched_core1">
+        <schedulingAlgorithm xsi:type="am:EarliestDeadlineFirst"/>
+      </taskSchedulers>
+    </operatingSystems>
+  </osModel>
+  <stimuliModel>
+    <stimuli xsi:type="am:PeriodicStimulus" xmi:id="no-name?type=PeriodicStimulus" name="">
+      <recurrence value="20" unit="ms"/>
+      <jitter xsi:type="am:TimeConstant"/>
+    </stimuli>
+  </stimuliModel>
+  <eventModel/>
+  <constraintsModel/>
+  <propertyConstraintsModel/>
+  <mappingModel>
+    <taskAllocation task="PID_0?type=Task" scheduler="HFOS_Sched_core0?type=TaskScheduler"/>
+    <taskAllocation task="EKF_0?type=Task" scheduler="HFOS_Sched_core1?type=TaskScheduler"/>
+  </mappingModel>
+</am:Amalthea>
