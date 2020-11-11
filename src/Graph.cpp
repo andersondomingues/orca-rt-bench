@@ -30,7 +30,7 @@
 #include <GraphNode.hpp>
 #include <Graph.hpp>
 
-namespace Orca::Graph {
+namespace OrcaSeer::Graph {
 
 Graph::Graph() {
     this->edges = new std::list<GraphEdge*>();
@@ -89,4 +89,37 @@ Graph::~Graph() {
     delete this->edges;
 }
 
-}  // namespace Orca::Graph
+std::string Graph::ToString() {
+    std::stringstream ss;
+
+    std::list<OrcaSeer::Graph::GraphNode*>::iterator i;
+
+    ss << "NODES ========================================" << std::endl;
+    OrcaSeer::Graph::GraphNodeData data;
+    for (i = nodes->begin(); i != nodes->end(); i++) {
+        data = *((*i)->getData());
+        ss << data.id << "\t" << data.name << " "
+            << "\t\t\t" << data.cpDever << std::endl;
+    }
+
+    if (nodes->size() == 0) ss << "none" << std::endl;
+
+    std::list<OrcaSeer::Graph::GraphEdge*>::iterator j;
+
+    ss << "EDGES ========================================" << std::endl;
+    OrcaSeer::Graph::GraphEdgeData edata;
+    for (j = edges->begin(); j != edges->end(); j++) {
+        edata = *((*j)->getData());
+        ss << (*j)->getFrom()->getData()->name
+            << "\t" << (*j)->getTo()->getData()->name
+            << edata.dataTransferTime << std::endl;
+    }
+
+    if (edges->size() == 0) ss << "none" << std::endl;
+
+    ss << "==============================================" << std::endl;
+
+    return ss.str();
+}
+
+}  // namespace OrcaSeer::Graph

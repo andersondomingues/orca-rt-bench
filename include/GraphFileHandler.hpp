@@ -31,7 +31,7 @@
 
 #include "Graph.hpp"
 
-namespace Orca::Graph {
+namespace OrcaSeer::Graph {
 
 class GraphFileHandler {
  public:
@@ -39,6 +39,6 @@ class GraphFileHandler {
     static void saveToFile(std::string filename, Graph* g);
 };
 
-}  // namespace Orca::Graph
+}  // namespace OrcaSeer::Graph
 
 #endif  // GRAPHFILEHANDLER_HPP_

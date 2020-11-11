@@ -28,7 +28,7 @@
 #include <GraphNode.hpp>
 #include <GraphEdge.hpp>
 
-namespace Orca::Graph {
+namespace OrcaSeer::Graph {
 
 GraphNode::GraphNode() {
     this->from = nullptr;
@@ -52,4 +52,4 @@ std::list<GraphEdge>* GraphNode::getFrom() {
     return this->from;
 }
 
-}  // namespace Orca::Graph
+}  // namespace OrcaSeer::Graph

@@ -32,7 +32,7 @@
 #include "GraphEdgeData.hpp"
 #include "GraphNode.hpp"
 
-namespace Orca::Graph {
+namespace OrcaSeer::Graph {
 
 class GraphNode;
 
@@ -52,6 +52,6 @@ class GraphEdge{
     GraphEdgeData* getData();
 };
 
-}  // namespace Orca::Graph
+}  // namespace OrcaSeer::Graph
 
 #endif  // GRAPHEDGE_HPP_

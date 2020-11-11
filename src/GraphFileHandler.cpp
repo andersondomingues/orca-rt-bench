@@ -36,7 +36,7 @@
 
 #define ENDL '\n'
 
-namespace Orca::Graph {
+namespace OrcaSeer::Graph {
 
 #define IGNORE 0
 #define FIND_NODE_HEADER 1
@@ -127,4 +127,4 @@ void GraphFileHandler::saveToFile(std::string filename, Graph* g) {
     return;
 }
 
-}  // namespace Orca::Graph
+}  // namespace OrcaSeer::Graph

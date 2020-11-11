@@ -28,7 +28,7 @@
 #include <GraphEdge.hpp>
 #include <GraphNode.hpp>
 
-namespace Orca::Graph {
+namespace OrcaSeer::Graph {
 
 GraphEdge::GraphEdge() {
     this->from = nullptr;
@@ -60,4 +60,4 @@ void GraphEdge::setTo(GraphNode* node) {
     this->to = node;
 }
 
-}  // namespace Orca::Graph
+}  // namespace OrcaSeer::Graph

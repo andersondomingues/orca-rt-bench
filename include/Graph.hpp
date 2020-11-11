@@ -33,7 +33,7 @@
 #include "GraphEdge.hpp"
 #include "GraphNode.hpp"
 
-namespace Orca::Graph {
+namespace OrcaSeer::Graph {
 
 class Graph{
  private:
@@ -48,8 +48,9 @@ class Graph{
     int addEdge(GraphEdge* edge);
     std::list<GraphNode*>* getNodes();
     std::list<GraphEdge*>* getEdges();
+    std::string ToString();
 };
 
-}  // namespace Orca::Graph
+}  // namespace OrcaSeer::Graph
 
 #endif  // GRAPH_HPP_

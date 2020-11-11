@@ -29,7 +29,7 @@
 
 #include <string>
 
-namespace Orca::Graph {
+namespace OrcaSeer::Graph {
 
 struct GraphNodeData{
     uint32_t id;
@@ -42,6 +42,6 @@ struct GraphNodeData{
     float period;
 };
 
-}  // namespace Orca::Graph
+}  // namespace OrcaSeer::Graph
 
 #endif  // GRAPHNODEDATA_HPP_

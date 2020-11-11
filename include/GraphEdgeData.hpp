@@ -30,7 +30,7 @@
 #include <string>
 #include <sstream>
 
-namespace Orca::Graph {
+namespace OrcaSeer::Graph {
 
 struct GraphEdgeData{
     uint32_t dataTransferTime;
@@ -40,6 +40,6 @@ struct GraphEdgeData{
     }
 };
 
-}  // namespace Orca::Graph
+}  // namespace OrcaSeer::Graph
 
 #endif  // GRAPHEDGEDATA_HPP_
