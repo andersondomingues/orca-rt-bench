@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
     OrcaSeer::Simulation::SimulationEngine* engine
         = new OrcaSeer::Simulation::SimulationEngine(graph, edf);
 
-    engine->Simulate(10000);  // milliseconds
+    engine->Simulate(20);  // milliseconds
 
     delete engine;
     delete edf;

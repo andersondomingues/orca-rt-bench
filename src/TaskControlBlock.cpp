@@ -50,11 +50,8 @@ std::string TaskControlBlock::toString() {
     std::stringstream ss;
     ss << "[" << id << "]" << name
         << ", p:" << period
-        << ", c:" << capacity
-        << ", d:" << deadline
-
-        << ", cc:" << current_capacity
-        << ", nd:" << next_deadline;
+        << ", c:" << current_capacity << "/" << capacity
+        << ", d:" << next_deadline << "[~" << deadline << "]";
     return ss.str();
 }
 

@@ -29,7 +29,7 @@
 namespace OrcaSeer::Simulation {
 
 bool SystemEvent::operator<(const SystemEvent& event) const {
-    return this->time < event.time;
+    return this->time > event.time;
 }
 
 bool SystemEvent::operator==(const SystemEvent& e) const {

@@ -22,8 +22,9 @@ TARGET_DEPS := $(subst $(SOURCEDIR), $(OUTPUTDIR), $(TARGET_DEPS))
 # optimizations favor performance over code size.
 #CXX := g++
 CXX := clang++
-CXXFLAGS := -std=c++17 -ferror-limit=5
-#fmax-errors=5 
+CXXFLAGS := -std=c++17 -ferror-limit=5 
+#-ferror-limit=5
+#-fmax-errors=5 
 CXXFLAGS += -fsanitize=address -ggdb
 #CXXFLAGS += -O3 -march=native -mtune=native 
 

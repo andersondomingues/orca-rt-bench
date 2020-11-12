@@ -49,6 +49,7 @@ class SimulationEngine{
      * Current system time in milliseconds.
      */
     SimulationTime systemTime;
+    SimulationTime elapsedTime;
     /**
      * A queue of <SystemEvent> which is sorted
      * by the time which events occur (ascending).
@@ -89,6 +90,11 @@ class SimulationEngine{
      * Destructor.
      */
     ~SimulationEngine();
+
+    /**
+     * print task lists
+     */
+    void PrintTaskLists();
 };
 
 }  // namespace OrcaSeer::Simulation

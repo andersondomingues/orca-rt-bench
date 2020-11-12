@@ -47,8 +47,18 @@ SimulationEngine::SimulationEngine(OrcaSeer::Graph::Graph* graph,
 
     // populate blocked list with tasks from the graph
     std::list<OrcaSeer::Graph::GraphNode*>::iterator i;
-    for (i = graph->getNodes()->begin(); i != graph->getNodes()->end(); i++) {
+    for (i = graph->getNodes()->begin(); i != graph->getNodes()->end(); ++i) {
         OrcaSeer::Graph::GraphNode* node = *i;
+
+        OrcaSeer::Task::TaskControlBlock* block
+            = new OrcaSeer::Task::TaskControlBlock(
+            node->getData()->id,
+            node->getData()->name,
+            node->getData()->period,
+            node->getData()->cpDever,
+            node->getData()->deadline);
+
+        this->blocked->push_back(block);
     }
 
     this->algorithm = algo;
@@ -71,7 +81,8 @@ SimulationTime SimulationEngine::Simulate(SimulationTime milliseconds) {
         queue->pop();
 
         // update current time
-        this->systemTime += top_event.time;
+        this->elapsedTime = top_event.time - this->systemTime;
+        this->systemTime += this->elapsedTime;
 
         std::cout << this->systemTime << ": " <<
             (top_event.type == SystemEventType::TASK_FINISHED_IRQ
@@ -79,38 +90,37 @@ SimulationTime SimulationEngine::Simulate(SimulationTime milliseconds) {
                 : "scheduler irq")
                     << std::endl;
 
+        PrintTaskLists();
+
         // If the top of the queue is a task finish syscall, we must
         // put the finished task into the blocked queue and process
         // a new task to take its place
-        if (top_event.type == SystemEventType::TASK_FINISHED_IRQ) {
-            // call scheduler
-            this->Schedule(algorithm);
-
-            // register next task finish within the simulation
-            top_event.time = this->running->front()->current_capacity -
-                this->running->front()->capacity;
-            queue->push(top_event);
+        this->Schedule(algorithm);
 
         // Next event is the scheduler interruption
-        } else if (top_event.type == SystemEventType::SCHEDULER_IRQ) {
-            // call scheduler
-            this->Schedule(algorithm);
-
+        if (top_event.type == SystemEventType::SCHEDULER_IRQ) {
             // remove all events from the simulation queue; since the
             // scheduler_irq has been removed, only the event for the
             // running task remains
             while (queue->size())
                 queue->pop();
 
-            // register next task finish within the simulation
-            top_event.time = this->running->front()->current_capacity -
-                this->running->front()->capacity;
-            queue->push(top_event);
-
             // register the interruption
             sched_irq.time = this->systemTime + SCHED_IRQ_PERIOD;
             queue->push(sched_irq);
         }
+
+        // register next task finish within the simulation
+        OrcaSeer::Task::TaskControlBlock* next_task
+                = this->running->front();
+
+        top_event.time = this->systemTime + (
+            next_task->capacity -
+            next_task->current_capacity);
+
+        top_event.type = SystemEventType::TASK_FINISHED_IRQ;
+        queue->push(top_event);
+        //
     } while (this->systemTime < milliseconds);
 
     return this->systemTime;
@@ -122,17 +132,19 @@ SimulationTime SimulationEngine::Schedule(
     std::list<OrcaSeer::Task::TaskControlBlock*>::iterator i;
 
     OrcaSeer::Task::TaskControlBlock* task;
-    for (i = running->begin(); i != running->end(); i++) {
+    for (i = running->begin(); i != running->end(); ++i) {
         task = *i;
 
         // add elapsed time to current capacity of the task
-        task->current_capacity += this->systemTime - task->capacity;
+        task->current_capacity += this->elapsedTime;
 
         // case A: task has timed out, preempted
         if (task->current_capacity < task->capacity) {
             this->ready->push_back(task);
         // case B: task has finished succeffuly
         } else {
+            task->current_capacity = 0;
+            task->next_deadline += task->deadline;
             this->blocked->push_back(task);
         }
     }
@@ -141,7 +153,7 @@ SimulationTime SimulationEngine::Schedule(
     this->running->clear();
 
     // move tasks from blocked to the ready queue
-    for (i = blocked->begin(); i != blocked->end(); i++) {
+    for (i = blocked->begin(); i != blocked->end(); ++i) {
         task = *i;
 
         // @TODO adjust release time so that tasks wait
@@ -160,11 +172,44 @@ SimulationTime SimulationEngine::Schedule(
 
     this->running->push_back(task);
 
+    PrintTaskLists();
+
     return this->systemTime;
+}
+
+void SimulationEngine::PrintTaskLists() {
+    std::list<OrcaSeer::Task::TaskControlBlock*>::iterator i;
+
+    // print lists
+    std::cout << "==============================================" << std::endl;
+    std::cout << "----- running" << std::endl;
+
+    for (i = running->begin(); i != running->end(); ++i)
+        std::cout << (*i)->toString() << std::endl;
+
+    std::cout << "----- ready" << std::endl;
+
+    for (i = ready->begin(); i != ready->end(); ++i)
+        std::cout << (*i)->toString() << std::endl;
+
+    std::cout << "----- blocked" << std::endl;
+
+    for (i = blocked->begin(); i != blocked->end(); ++i)
+        std::cout << (*i)->toString() << std::endl;
+
+    std::cout << "==============================================" << std::endl;
 }
 
 SimulationEngine::~SimulationEngine() {
     delete queue;
+
+    // empty lists
+    std::list<OrcaSeer::Task::TaskControlBlock*>::iterator i;
+
+    for (i = running->begin(); i != running->end(); ++i) delete *i;
+    for (i = blocked->begin(); i != blocked->end(); ++i) delete *i;
+    for (i = ready->begin(); i != ready->end(); ++i) delete *i;
+
     delete running;
     delete blocked;
     delete ready;
