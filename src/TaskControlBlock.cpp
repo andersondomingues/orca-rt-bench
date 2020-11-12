@@ -43,6 +43,7 @@ TaskControlBlock::TaskControlBlock(uint32_t id, std::string name,
     this->deadline = deadline;
 
     this->current_capacity = 0;
+    this->release_time = 0;
     this->next_deadline = this->deadline;
 }
 

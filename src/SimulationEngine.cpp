@@ -32,7 +32,7 @@
 #include "SchedulingAlgorithm.hpp"
 
 // ms
-#define SCHED_IRQ_PERIOD 300
+#define SCHED_IRQ_PERIOD 1
 
 namespace OrcaSeer::Simulation {
 
@@ -90,8 +90,6 @@ SimulationTime SimulationEngine::Simulate(SimulationTime milliseconds) {
                 : "scheduler irq")
                     << std::endl;
 
-        PrintTaskLists();
-
         // If the top of the queue is a task finish syscall, we must
         // put the finished task into the blocked queue and process
         // a new task to take its place
@@ -114,13 +112,20 @@ SimulationTime SimulationEngine::Simulate(SimulationTime milliseconds) {
         OrcaSeer::Task::TaskControlBlock* next_task
                 = this->running->front();
 
-        top_event.time = this->systemTime + (
-            next_task->capacity -
-            next_task->current_capacity);
+        // slack time
+        if (next_task != nullptr) {
+            top_event.time = this->systemTime + (
+                next_task->capacity -
+                next_task->current_capacity);
 
-        top_event.type = SystemEventType::TASK_FINISHED_IRQ;
-        queue->push(top_event);
+            top_event.type = SystemEventType::TASK_FINISHED_IRQ;
+            queue->push(top_event);
+            std::cout << "running task" << std::endl;
+        } else {
+            std::cout << "slack time" << std::endl;
+        }
         //
+        PrintTaskLists();
     } while (this->systemTime < milliseconds);
 
     return this->systemTime;
@@ -143,6 +148,7 @@ SimulationTime SimulationEngine::Schedule(
             this->ready->push_back(task);
         // case B: task has finished succeffuly
         } else {
+            task->release_time += task->period;
             task->current_capacity = 0;
             task->next_deadline += task->deadline;
             this->blocked->push_back(task);
@@ -152,27 +158,32 @@ SimulationTime SimulationEngine::Schedule(
     // clear running list as tasks were added to other lists
     this->running->clear();
 
+    std::list<OrcaSeer::Task::TaskControlBlock*> freed;
+
     // move tasks from blocked to the ready queue
     for (i = blocked->begin(); i != blocked->end(); ++i) {
         task = *i;
 
-        // @TODO adjust release time so that tasks wait
-        // the next hypercycle to trigger
-        this->ready->push_back(task);
+        if (task->release_time <= this->systemTime) {
+            this->ready->push_back(task);
+            freed.push_back(task);
+        }
     }
 
-    this->blocked->clear();
+    // remove freed tasks from blocked list
+    for (i = freed.begin(); i != freed.end(); ++i)
+        this->blocked->remove(*i);
 
     // sort ready list (using sort algorithm)
     algorithm->Schedule(this->ready);
 
     // get first element and push it to the executing queue
     task = *(this->ready->begin());
-    this->ready->remove(task);
 
-    this->running->push_back(task);
-
-    PrintTaskLists();
+    if (task != nullptr) {
+        this->ready->remove(task);
+        this->running->push_back(task);
+    }
 
     return this->systemTime;
 }
