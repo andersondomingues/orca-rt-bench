@@ -24,25 +24,35 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef EARLIESTDEADLINEFIRST_HPP_
-#define EARLIESTDEADLINEFIRST_HPP_
-
-#include <string>
-#include <list>
-
-#include "Graph.hpp"
-#include "SchedulingAlgorithm.hpp"
+#include <iostream>
+#include "LeastSlackTime.hpp"
 
 namespace OrcaSeer::Task {
 
-class EarliestDeadlineFirst : public SchedulingAlgorithm {
- public:
-    EarliestDeadlineFirst();
-    ~EarliestDeadlineFirst();
+LeastSlackTime::LeastSlackTime() {
+    // add all tasks to the tlb
+}
 
-    void Schedule(std::list<TaskControlBlock*>* r) override;
-};
+LeastSlackTime::~LeastSlackTime() {
+    //
+}
+
+// schedule -> sort tasks
+void LeastSlackTime::Schedule(std::list<TaskControlBlock*>* r) {
+    // sort list of ready tasks by earliest deadline
+    r->sort([]
+        (const TaskControlBlock* e1, const TaskControlBlock* e2) {
+            uint32_t slacktime_e1, slacktime_e2;
+            // should be (deadline - currentTime) - current_capacity),
+            // however, there is need to subtract currentTime as it would
+            // not make any difference in the comparison
+            slacktime_e1 = e1->next_deadline -
+                (e1->capacity - e1->current_capacity);
+            slacktime_e2 = e2->next_deadline -
+                (e2->capacity - e2->current_capacity);
+
+            return slacktime_e1 < slacktime_e2;
+    });
+}
 
 }  // namespace OrcaSeer::Task
-
-#endif  // EARLIESTDEADLINEFIRST_HPP_

@@ -115,8 +115,7 @@ SimulationTime SimulationEngine::Simulate(SimulationTime milliseconds) {
         // slack time
         if (next_task != nullptr) {
             top_event.time = this->systemTime + (
-                next_task->capacity -
-                next_task->current_capacity);
+                next_task->capacity - next_task->current_capacity);
 
             top_event.type = SystemEventType::TASK_FINISHED_IRQ;
             queue->push(top_event);
@@ -124,7 +123,7 @@ SimulationTime SimulationEngine::Simulate(SimulationTime milliseconds) {
         } else {
             std::cout << "slack time" << std::endl;
         }
-        //
+
         PrintTaskLists();
     } while (this->systemTime < milliseconds);
 
@@ -177,13 +176,16 @@ SimulationTime SimulationEngine::Schedule(
     // sort ready list (using sort algorithm)
     algorithm->Schedule(this->ready);
 
-    // get first element and push it to the executing queue
+    // get first element and push it to the executing queue (if any)
     task = *(this->ready->begin());
 
     if (task != nullptr) {
         this->ready->remove(task);
         this->running->push_back(task);
     }
+
+    if (task->next_deadline < this->systemTime)
+        std::cout << "missed deadline!";
 
     return this->systemTime;
 }

@@ -25,21 +25,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
 #include <iostream>
+#include <exception>
+
 #include "main.hpp"
-#include <Graph.hpp>
-#include <GraphFileHandler.hpp>
+
+#include "Graph.hpp"
+#include "GraphFileHandler.hpp"
 #include "SimulationEngine.hpp"
 #include "EarliestDeadlineFirst.hpp"
+#include "LeastSlackTime.hpp"
 
 int main(int argc, char** argv) {
-    // std::string filename = "examples-ogm/waters2019.otm";
-    std::string filename = "dist/examples/foundations-table3.2.otm";
+    //
+    int ticks;
+    std::string graphFile;
+
+    // check on arguments
+    try {
+        if (argc != 3) throw std::runtime_error("");
+
+        ticks = std::stoi(argv[1], nullptr, 10);
+        graphFile = std::string(argv[2]);
+    } catch (std::exception& e) {
+        std::cout << "Usage:" << std::endl;
+        std::cout << "\t" << std::string(argv[0]);
+        std::cout << " <ticks> <graph file> [<algorithm>=EDF]" << std::endl;
+        std::cout << std::flush;
+        return -1;
+    }
 
     OrcaSeer::Graph::Graph* graph;
-    graph = OrcaSeer::Graph::GraphFileHandler::parseFromFile(filename);
+    graph = OrcaSeer::Graph::GraphFileHandler::parseFromFile(graphFile);
 
     if (graph == nullptr) {
-        std::cout << "could not open file <" << filename << ">" << std::endl;
+        std::cout << "could not open file <" << graphFile << ">" << std::endl;
         return -1;
     }
 
@@ -51,7 +70,7 @@ int main(int argc, char** argv) {
     OrcaSeer::Simulation::SimulationEngine* engine
         = new OrcaSeer::Simulation::SimulationEngine(graph, edf);
 
-    engine->Simulate(20);  // milliseconds
+    engine->Simulate(ticks);  // milliseconds
 
     delete engine;
     delete edf;

@@ -24,8 +24,8 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef EARLIESTDEADLINEFIRST_HPP_
-#define EARLIESTDEADLINEFIRST_HPP_
+#ifndef LEASTSLACKTIME_HPP_
+#define LEASTSLACKTIME_HPP_
 
 #include <string>
 #include <list>
@@ -35,14 +35,14 @@
 
 namespace OrcaSeer::Task {
 
-class EarliestDeadlineFirst : public SchedulingAlgorithm {
+class LeastSlackTime : public SchedulingAlgorithm {
  public:
-    EarliestDeadlineFirst();
-    ~EarliestDeadlineFirst();
+    LeastSlackTime();
+    ~LeastSlackTime();
 
     void Schedule(std::list<TaskControlBlock*>* r) override;
 };
 
 }  // namespace OrcaSeer::Task
 
-#endif  // EARLIESTDEADLINEFIRST_HPP_
+#endif  // LEASTSLACKTIME_HPP_
