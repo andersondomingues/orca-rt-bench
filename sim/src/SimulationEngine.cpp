@@ -182,10 +182,11 @@ SimulationTime SimulationEngine::Schedule(
     if (task != nullptr) {
         this->ready->remove(task);
         this->running->push_back(task);
+
+        if (task->next_deadline < this->systemTime)
+            std::cout << "missed deadline!";
     }
 
-    if (task->next_deadline < this->systemTime)
-        std::cout << "missed deadline!";
 
     return this->systemTime;
 }

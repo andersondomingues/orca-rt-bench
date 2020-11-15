@@ -24,8 +24,8 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef SIMULATIONENGINE_HPP_
-#define SIMULATIONENGINE_HPP_
+#ifndef SIM_INCLUDE_SIMULATIONENGINE_HPP_
+#define SIM_INCLUDE_SIMULATIONENGINE_HPP_
 
 #include <string>
 #include <queue>
@@ -99,4 +99,4 @@ class SimulationEngine{
 
 }  // namespace OrcaSeer::Simulation
 
-#endif  // SIMULATIONENGINE_HPP_
+#endif  // SIM_INCLUDE_SIMULATIONENGINE_HPP_

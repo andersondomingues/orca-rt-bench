@@ -1,19 +1,11 @@
 SOURCEDIR :=src
 HEADERDIR :=include
-OUTPUTDIR :=bin
+OUTPUTDIR :=../bin
+EXENAME :=sim.exe
 
 # Name of the package
 LIBNAME := liborcagraph.a
 
-#TARGET_DEPS := \
-#	$(OUTPUTDIR)/GraphNode.o \
-#	$(OUTPUTDIR)/GraphEdge.o \
-#	$(OUTPUTDIR)/Graph.o \
-#	$(OUTPUTDIR)/GraphFileHandler.o \
-#	$(OUTPUTDIR)/SimulationEngine.o \
-#	$(OUTPUTDIR)/SystemEvent.o \
-#	$(OUTPUTDIR)/SystemSimulation.o \
-#	$(OUTPUTDIR)/EarliestDeadlineFirst.o
 TARGET_DEPS := $(wildcard $(SOURCEDIR)/*.cpp)
 TARGET_DEPS := $(subst .cpp,.o, $(TARGET_DEPS))
 TARGET_DEPS := $(subst $(SOURCEDIR), $(OUTPUTDIR), $(TARGET_DEPS))
@@ -28,15 +20,11 @@ CXXFLAGS := -std=c++17 -ferror-limit=5
 CXXFLAGS += -fsanitize=address -ggdb
 #CXXFLAGS += -O3 -march=native -mtune=native 
 
-all: $(OUTPUTDIR)/$(LIBNAME) $(OUTPUTDIR)/main.o
-	@$(CXX) $(CXXFLAGS) -I$(HEADERDIR) $(OUTPUTDIR)/main.o -o $(OUTPUTDIR)/test.exe -Lbin -lorcagraph
-	@echo "done."
-	
-#pack file into a static library to be used later
-$(OUTPUTDIR)/$(LIBNAME): $(TARGET_DEPS)
-	@echo "Packing \"$(LIBNAME)\"..."
-	@ar rcs $(OUTPUTDIR)/$(LIBNAME) $(TARGET_DEPS)
-#@ar -t $(OUTPUTDIR)/$(LIBNAME)
+all: $(TARGET_DEPS) $(OUTPUTDIR)/main.o
+	@$(CXX) $(CXXFLAGS) -I$(HEADERDIR) $(TARGET_DEPS) -o $(OUTPUTDIR)/$(EXENAME)
+
+run:
+	../bin/sim.exe 20 ../dist/foundations-table3.2.ogm
 
 #compile all classes into %.o files
 $(OUTPUTDIR)/%.o: $(SOURCEDIR)/%.cpp $(HEADERDIR)/%.hpp
@@ -45,4 +33,4 @@ $(OUTPUTDIR)/%.o: $(SOURCEDIR)/%.cpp $(HEADERDIR)/%.hpp
 
 # Remove generated object files and library
 clean:
-	@rm -rf $(OUTPUTDIR)/*.o $(OUTPUTDIR)/*.a $(OUTPUTDIR)/*.exe
+	@rm -rf $(TARGET_DEPS) $(OUTPUTDIR)/$(EXENAME)

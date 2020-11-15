@@ -50,8 +50,10 @@
         "-legal/copyright"
     ],
     "C_Cpp.default.includePath": [
-        "/home/adomingues/gaph/orca-modeling/include"
+        "/home/adomingues/gaph/orca-modeling/sim/include"
     ],
     "cpplint.cpplintPath": "/home/adomingues/.local/bin/cpplint",
-    "c-cpp-flylint.clang.standard": ["c++2a"]
+    "c-cpp-flylint.clang.standard": ["c++2a"],        
+    "c-cpp-flylint.clang.includePaths": ["/home/adomingues/gaph/orca-modeling/sim/include"],
+    "c-cpp-flylint.flexelint.enable": false
 }
