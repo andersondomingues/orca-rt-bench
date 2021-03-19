@@ -14,7 +14,8 @@ CXX := g++
 CXXFLAGS := -std=c++17 -fmax-errors=5 
 #-ferror-limit=5
 #-fmax-errors=5 
-CXXFLAGS += -fsanitize=address -ggdb
+CXXFLAGS += -ggdb
+#-fsanitize=address
 #CXXFLAGS += -O3 -march=native -mtune=native 
 
 all: $(TARGET_DEPS) $(OUTPUTDIR)/main.o

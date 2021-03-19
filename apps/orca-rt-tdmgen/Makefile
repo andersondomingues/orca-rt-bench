@@ -12,12 +12,14 @@ TARGET_DEPS := $(subst $(SOURCEDIR), $(OUTPUTDIR), $(TARGET_DEPS))
 
 # Add optimization and include flags to the compilation. Compilation 
 # optimizations favor performance over code size.
-#CXX := g++
-CXX := clang++
-CXXFLAGS := -std=c++17 -ferror-limit=5 
+CXX := g++
+#CXX := clang++
+CXXFLAGS := -std=c++17 -fmax-errors=5  
 #-ferror-limit=5
-#-fmax-errors=5 
-CXXFLAGS += -fsanitize=address -ggdb
+
+#NOTE: lasan not supported on windows
+CXXFLAGS += -ggdb
+#-fsanitize=address
 #CXXFLAGS += -O3 -march=native -mtune=native 
 
 all: $(TARGET_DEPS) $(OUTPUTDIR)/main.o
