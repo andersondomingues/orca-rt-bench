@@ -25,8 +25,8 @@ CXXFLAGS += -ggdb
 all: $(TARGET_DEPS) $(OUTPUTDIR)/main.o
 	@$(CXX) $(CXXFLAGS) -I$(HEADERDIR) $(TARGET_DEPS) -o $(OUTPUTDIR)/$(EXENAME)
 
-run:
-	../bin/sim.exe 20 ../dist/foundations-table3.2.ogm
+#run:
+#	../bin/sim.exe 20 ../dist/foundations-table3.2.ogm
 
 #compile all classes into %.o files
 $(OUTPUTDIR)/%.o: $(SOURCEDIR)/%.cpp $(HEADERDIR)/%.hpp

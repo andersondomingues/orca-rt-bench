@@ -24,28 +24,21 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef SIM_INCLUDE_EARLIESTDEADLINEFIRST_HPP_
-#define SIM_INCLUDE_EARLIESTDEADLINEFIRST_HPP_
+#ifndef SIM_INCLUDE_INIFILEHANDLER_HPP_
+#define SIM_INCLUDE_INIFILEHANDLER_HPP_
 
 #include <string>
-#include <list>
 
-#include "Graph.hpp"
-#include "SchedulingAlgorithm.hpp"
-#include "TaskControlBlock.hpp"
+#include "IniFile.hpp"
 
-using namespace std;
+namespace OrcaRT::Ini {
 
-namespace OrcaSeer::Task {
-
-class EarliestDeadlineFirst : public SchedulingAlgorithm {
+class IniFileHandler {
  public:
-    EarliestDeadlineFirst();
-    ~EarliestDeadlineFirst();
-
-    void Schedule(std::list<TaskControlBlock*>* r) override;
+    static IniFile* LoadFromFile(std::string filename);
+    static void saveToFile(std::string filename, IniFile* g);
 };
 
-}  // namespace OrcaSeer::Task
+}  // namespace OrcaRT::Ini
 
-#endif  // SIM_INCLUDE_EARLIESTDEADLINEFIRST_HPP_
+#endif  // SIM_INCLUDE_GRAPHFILEHANDLER_HPP_

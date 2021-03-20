@@ -22,30 +22,68 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
-#ifndef SIM_INCLUDE_EARLIESTDEADLINEFIRST_HPP_
-#define SIM_INCLUDE_EARLIESTDEADLINEFIRST_HPP_
+#include "../include/IniFile.hpp"
 
-#include <string>
 #include <list>
+#include <fstream>
+#include <iostream>
 
-#include "Graph.hpp"
-#include "SchedulingAlgorithm.hpp"
-#include "TaskControlBlock.hpp"
+namespace OrcaRT::Ini {
 
-using namespace std;
+IniFileEntry* IniFile::GetEntry(std::string section, std::string entry){
 
-namespace OrcaSeer::Task {
+	std::list<IniFileEntry*>::iterator i = this->Begin();
+	std::list<IniFileEntry*>::iterator j = this->End();
 
-class EarliestDeadlineFirst : public SchedulingAlgorithm {
- public:
-    EarliestDeadlineFirst();
-    ~EarliestDeadlineFirst();
+	for(; i != j; i++){
+		if((*i)->section == section && (*i)->entry == entry)
+			return *i;
+	}
 
-    void Schedule(std::list<TaskControlBlock*>* r) override;
-};
+	return nullptr;
+}
 
-}  // namespace OrcaSeer::Task
+IniFileEntry* IniFile::SetEntry(std::string section, std::string entry, std::string value){
 
-#endif  // SIM_INCLUDE_EARLIESTDEADLINEFIRST_HPP_
+	IniFileEntry* w = this->GetEntry(section, entry);
+
+	if(w != nullptr){
+		w->value = value;
+
+	}else{
+		w = new IniFileEntry();
+		w->entry = entry;
+		w->section = section;
+		w->value = value;
+
+		this->entries.push_back(w);
+	}
+
+	return w;
+}
+
+std::list<IniFileEntry*>::iterator IniFile::Begin(){
+	return this->entries.begin();
+}
+
+std::list<IniFileEntry*>::iterator IniFile::End(){
+	return this->entries.end();
+}
+
+IniFile::IniFile(){
+	this->entries = std::list<IniFileEntry*>();
+}
+
+IniFile::~IniFile(){
+
+	std::list<IniFileEntry*>::iterator i = this->Begin();
+	std::list<IniFileEntry*>::iterator j = this->End();
+
+	for(; i != j; i++){
+		delete *i;
+	}
+}
+
+}  // namespace OrcaRT::Ini
