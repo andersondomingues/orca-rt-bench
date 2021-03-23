@@ -30,23 +30,16 @@
 #include <fstream>
 #include <iostream>
 
-#include "GraphEdge.hpp"
-#include "GraphNode.hpp"
-#include "Graph.hpp"
+namespace OrcaTR::Ini {
 
+static IniFile* IniFileHandler::LoadFromFile(std::string filename){
 
-#define ENDL '\n'
+}
 
-namespace OrcaSeer::Graph {
+static void IniFileHandler::SaveToFile(std::string filename, IniFile* g){
 
-#define IGNORE 0
-#define FIND_NODE_HEADER 1
-#define PARSE_NODES 2
-#define FIND_EDGE_HEADER 3
-#define PARSE_EDGES 4
+}
 
-#define NODE_HEADER "[nodes]"
-#define EDGE_HEADER "[edges]"
 
 //Graph* GraphFileHandler::parseFromFile(std::string filename) {
 //    Graph* graph = new Graph();

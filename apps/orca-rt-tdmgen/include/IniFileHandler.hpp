@@ -36,7 +36,7 @@ namespace OrcaRT::Ini {
 class IniFileHandler {
  public:
     static IniFile* LoadFromFile(std::string filename);
-    static void saveToFile(std::string filename, IniFile* g);
+    static void SaveToFile(std::string filename, IniFile* g);
 };
 
 }  // namespace OrcaRT::Ini

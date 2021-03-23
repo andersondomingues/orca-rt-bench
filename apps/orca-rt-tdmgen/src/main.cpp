@@ -47,7 +47,7 @@ int main(int argc, char** argv){
 	}
 
     //read noc info from file
-//	IniFileHandler* fhandler = new IniFileHandler(argv[2]);
+    IniFileHandler* fhandler = new IniFileHandler(argv[2]);
 
 //	if(fhandler == nullptr)
 //		throw std::runtime_error("Unable to read from file" + argv[2]);
