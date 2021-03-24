@@ -24,21 +24,33 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef SIM_INCLUDE_INIFILEHANDLER_HPP_
-#define SIM_INCLUDE_INIFILEHANDLER_HPP_
+#ifndef SIM_INCLUDE_GRAPH_HPP_
+#define SIM_INCLUDE_GRAPH_HPP_
 
+#include <list>
 #include <string>
 
-#include "IniFile.hpp"
+#include "../../orca-rtgen/include/GraphEdge.hpp"
+#include "../../orca-rtgen/include/GraphNode.hpp"
 
-namespace OrcaRT::Ini {
+namespace OrcaSeer::Graph {
 
-class IniFileHandler {
+class Graph{
+ private:
+    std::list<GraphEdge*>* edges;
+    std::list<GraphNode*>* nodes;
+
  public:
-    static IniFile* LoadFromFile(std::string filename);
-    static void SaveToFile(std::string filename, IniFile* g);
+    Graph();
+    ~Graph();
+    int addNode(GraphNode* node);
+    int removeNode(GraphNode* node);
+    int addEdge(GraphEdge* edge);
+    std::list<GraphNode*>* getNodes();
+    std::list<GraphEdge*>* getEdges();
+    std::string ToString();
 };
 
-}  // namespace OrcaRT::Ini
+}  // namespace OrcaSeer::Graph
 
-#endif  // SIM_INCLUDE_GRAPHFILEHANDLER_HPP_
+#endif  // SIM_INCLUDE_GRAPH_HPP_

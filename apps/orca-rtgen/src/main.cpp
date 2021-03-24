@@ -8,7 +8,7 @@
  * http://https://github.com/andersondomingues/orca-tools
  * http://https://github.com/andersondomingues/orca-modeling
  *
- * Copyright (C) 2018-2020 Anderson Domingues, <ti.andersondomingues@gmail.com>
+ * Copyright (C) 2018-2021 Anderson Domingues, <ti.andersondomingues@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,39 +22,37 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef SIM_INCLUDE_INIFILE_HPP_
-#define SIM_INCLUDE_INIFILE_HPP_
-
-#include <string>
-#include <list>
+#include <iostream>
 
 #include "IniFile.hpp"
+#include "IniFileHandler.hpp"
 
-namespace OrcaRT::Ini {
+#include "GraphEdge.hpp"
+#include "GraphNode.hpp"
+#include "GraphNodeData.hpp"
 
-class IniFileEntry{
- public:
-	std::string section;
-	std::string entry;
-	std::string value;
-};
+using namespace Orca::RTGen;
 
-class IniFile {
-private:
-	std::list<IniFileEntry*> entries;
+int main(int argc, char** argv){
 
- public:
-	IniFileEntry* GetEntry(std::string section, std::string entry);
-	IniFileEntry* SetEntry(std::string section, std::string entry, std::string value);
-	std::list<IniFileEntry*>::iterator Begin();
-	std::list<IniFileEntry*>::iterator End();
+	std::string projectFile;
 
-	IniFile();
-	~IniFile();
-};
+	try {
+		if (argc != 2) throw std::runtime_error("");
+		projectFile = std::string(argv[2]);
+	} catch (std::exception& e) {
+		std::cout << "Usage:" << std::endl;
+		std::cout << "\t" << std::string(argv[0]);
+		std::cout << " <configuration_file>" << std::endl;
+		std::cout << std::flush;
+		return -1;
+	}
 
-}  // namespace OrcaRT::Ini
+    //read noc info from file
+    IniFileHandler* fhandler = new IniFileHandler();
+    IniFile* file = fhandler->LoadFromFile(projectFile);
+    delete fhandler;
 
-#endif  // SIM_INCLUDE_INIFILE_HPP_
+}

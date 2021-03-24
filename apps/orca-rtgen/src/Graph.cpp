@@ -24,11 +24,12 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
+#include "../../orca-rtgen/include/Graph.hpp"
+
 #include <list>
 
-#include <GraphEdge.hpp>
-#include <GraphNode.hpp>
-#include <Graph.hpp>
+#include "../../orca-rtgen/include/GraphEdge.hpp"
+#include "../../orca-rtgen/include/GraphNode.hpp"
 
 namespace OrcaSeer::Graph {
 

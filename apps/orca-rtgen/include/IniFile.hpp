@@ -22,36 +22,37 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
-#ifndef SIM_INCLUDE_GRAPHEDGE_HPP_
-#define SIM_INCLUDE_GRAPHEDGE_HPP_
+#ifndef APPS_ORCA_RTGEN_SRC_INIFILE_HPP_
+#define APPS_ORCA_RTGEN_SRC_INIFILE_HPP_
 
 #include <string>
+#include <list>
 
-#include "GraphEdgeData.hpp"
-#include "GraphNode.hpp"
+namespace Orca::RTGen {
 
-namespace OrcaSeer::Graph {
-
-class GraphNode;
-
-class GraphEdge{
- private:
-    GraphNode* from;
-    GraphNode* to;
-    GraphEdgeData data;
-
+class IniFileEntry{
  public:
-    GraphEdge();
-    ~GraphEdge();
-    void setFrom(GraphNode* node);
-    void setTo(GraphNode* node);
-    GraphNode* getFrom();
-    GraphNode* getTo();
-    GraphEdgeData* getData();
+	std::string section;
+	std::string entry;
+	std::string value;
 };
 
-}  // namespace OrcaSeer::Graph
+class IniFile {
+private:
+	std::list<IniFileEntry*> entries;
 
-#endif  // SIM_INCLUDE_GRAPHEDGE_HPP_
+ public:
+	IniFileEntry* GetEntry(std::string section, std::string entry);
+	IniFileEntry* SetEntry(std::string section, std::string entry, std::string value);
+	std::list<IniFileEntry*>::iterator Begin();
+	std::list<IniFileEntry*>::iterator End();
+
+	IniFile();
+	~IniFile();
+};
+
+}  // namespace  Orca::RTGen
+
+#endif  // APPS_ORCA_RTGEN_SRC_INIFILE_HPP_

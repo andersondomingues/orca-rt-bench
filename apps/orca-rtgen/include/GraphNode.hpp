@@ -30,8 +30,8 @@
 #include <list>
 #include <string>
 
-#include "GraphNodeData.hpp"
-#include "GraphEdge.hpp"
+#include "../../orca-rtgen/include/GraphEdge.hpp"
+#include "../../orca-rtgen/include/GraphNodeData.hpp"
 
 namespace OrcaSeer::Graph {
 

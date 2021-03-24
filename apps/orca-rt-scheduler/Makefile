@@ -20,6 +20,7 @@ CXXFLAGS += -ggdb
 
 all: $(TARGET_DEPS) $(OUTPUTDIR)/main.o
 	@$(CXX) $(CXXFLAGS) -I$(HEADERDIR) $(TARGET_DEPS) -o $(OUTPUTDIR)/$(EXENAME)
+	@mv $(OUTPUTDIR)/$(EXENAME) ../../$(OUTPUTDIR)/$(EXENAME)
 
 run:
 	../bin/sim.exe 20 ../dist/foundations-table3.2.ogm

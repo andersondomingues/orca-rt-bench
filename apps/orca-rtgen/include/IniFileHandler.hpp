@@ -8,7 +8,7 @@
  * http://https://github.com/andersondomingues/orca-tools
  * http://https://github.com/andersondomingues/orca-modeling
  *
- * Copyright (C) 2018-2021 Anderson Domingues, <ti.andersondomingues@gmail.com>
+ * Copyright (C) 2018-2020 Anderson Domingues, <ti.andersondomingues@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,32 +24,21 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#include <iostream>
+#ifndef APPS_ORCA_RTGEN_SRC_INIFILEHANDLER_HPP_
+#define APPS_ORCA_RTGEN_SRC_INIFILEHANDLER_HPP_
 
-#include <GraphNodeData.hpp>
-#include <GraphNode.hpp>
-#include <GraphEdge.hpp>
+#include <string>
 
-int main(int argc, char** argv){
+#include "IniFile.hpp"
 
-	std::string projectFile;
+namespace Orca::RTGen {
 
-	// arguments 'validation'
-	try {
-		if (argc != 2) throw std::runtime_error("");
-		projectFile = std::string(argv[2]);
-	} catch (std::exception& e) {
-		std::cout << "Usage:" << std::endl;
-		std::cout << "\t" << std::string(argv[0]);
-		std::cout << " <configuration_file>" << std::endl;
-		std::cout << std::flush;
-		return -1;
-	}
+class IniFileHandler {
+ public:
+    static IniFile* LoadFromFile(std::string filename);
+    static void SaveToFile(std::string filename, IniFile* g);
+};
 
-    //read noc info from file
-    IniFileHandler* fhandler = new IniFileHandler(argv[2]);
+}  // namespace Orca::RTGen
 
-//	if(fhandler == nullptr)
-//		throw std::runtime_error("Unable to read from file" + argv[2]);
-
-}
+#endif  // APPS_ORCA_RTGEN_SRC_INIFILEHANDLER_HPP_

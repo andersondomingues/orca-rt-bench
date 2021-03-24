@@ -22,68 +22,36 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#include "../include/IniFile.hpp"
+#ifndef SIM_INCLUDE_GRAPHEDGE_HPP_
+#define SIM_INCLUDE_GRAPHEDGE_HPP_
 
-#include <list>
-#include <fstream>
-#include <iostream>
+#include <string>
 
-namespace OrcaRT::Ini {
+#include "../../orca-rtgen/include/GraphEdgeData.hpp"
+#include "../../orca-rtgen/include/GraphNode.hpp"
 
-IniFileEntry* IniFile::GetEntry(std::string section, std::string entry){
+namespace OrcaSeer::Graph {
 
-	std::list<IniFileEntry*>::iterator i = this->Begin();
-	std::list<IniFileEntry*>::iterator j = this->End();
+class GraphNode;
 
-	for(; i != j; i++){
-		if((*i)->section == section && (*i)->entry == entry)
-			return *i;
-	}
+class GraphEdge{
+ private:
+    GraphNode* from;
+    GraphNode* to;
+    GraphEdgeData data;
 
-	return nullptr;
-}
+ public:
+    GraphEdge();
+    ~GraphEdge();
+    void setFrom(GraphNode* node);
+    void setTo(GraphNode* node);
+    GraphNode* getFrom();
+    GraphNode* getTo();
+    GraphEdgeData* getData();
+};
 
-IniFileEntry* IniFile::SetEntry(std::string section, std::string entry, std::string value){
+}  // namespace OrcaSeer::Graph
 
-	IniFileEntry* w = this->GetEntry(section, entry);
-
-	if(w != nullptr){
-		w->value = value;
-
-	}else{
-		w = new IniFileEntry();
-		w->entry = entry;
-		w->section = section;
-		w->value = value;
-
-		this->entries.push_back(w);
-	}
-
-	return w;
-}
-
-std::list<IniFileEntry*>::iterator IniFile::Begin(){
-	return this->entries.begin();
-}
-
-std::list<IniFileEntry*>::iterator IniFile::End(){
-	return this->entries.end();
-}
-
-IniFile::IniFile(){
-	this->entries = std::list<IniFileEntry*>();
-}
-
-IniFile::~IniFile(){
-
-	std::list<IniFileEntry*>::iterator i = this->Begin();
-	std::list<IniFileEntry*>::iterator j = this->End();
-
-	for(; i != j; i++){
-		delete *i;
-	}
-}
-
-}  // namespace OrcaRT::Ini
+#endif  // SIM_INCLUDE_GRAPHEDGE_HPP_

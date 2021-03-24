@@ -9,4 +9,4 @@ clean:
 	@for app in $(apps) ; do \
 		make -C $$app clean; \
 	done
-	@rm -rf dist/*
+	@rm -rf bin/*.exe

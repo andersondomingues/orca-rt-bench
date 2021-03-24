@@ -24,32 +24,41 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#include <GraphNodeData.hpp>
-#include <GraphNode.hpp>
-#include <GraphEdge.hpp>
+#include "../../orca-rtgen/include/GraphEdge.hpp"
+
+#include "../../orca-rtgen/include/GraphEdgeData.hpp"
+#include "../../orca-rtgen/include/GraphNode.hpp"
 
 namespace OrcaSeer::Graph {
 
-GraphNode::GraphNode() {
+GraphEdge::GraphEdge() {
     this->from = nullptr;
     this->to = nullptr;
-    this->data = GraphNodeData();
+    this->data = GraphEdgeData();
 }
 
-GraphNode::~GraphNode() {
+GraphEdge::~GraphEdge() {
     // nothing
 }
 
-GraphNodeData* GraphNode::getData() {
-    return &(this->data);
+GraphNode* GraphEdge::getFrom() {
+    return this->from;
 }
 
-std::list<GraphEdge>* GraphNode::getTo() {
+GraphNode* GraphEdge::getTo() {
     return this->to;
 }
 
-std::list<GraphEdge>* GraphNode::getFrom() {
-    return this->from;
+GraphEdgeData* GraphEdge::getData() {
+    return &(this->data);
+}
+
+void GraphEdge::setFrom(GraphNode* node) {
+    this->from = node;
+}
+
+void GraphEdge::setTo(GraphNode* node) {
+    this->to = node;
 }
 
 }  // namespace OrcaSeer::Graph
