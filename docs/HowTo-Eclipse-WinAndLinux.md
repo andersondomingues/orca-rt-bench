@@ -20,6 +20,7 @@
 - To build the project, right click on project's root folder and select "build". The same applies for cleaning.
 
 
+
 ## Submiting code back to GitHub
 
 - Code must be submited as pull requests (see https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests).
