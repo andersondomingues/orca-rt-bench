@@ -29,10 +29,10 @@
 
 #include <string>
 
-#include "../../orca-rtgen/include/GraphEdgeData.hpp"
-#include "../../orca-rtgen/include/GraphNode.hpp"
+#include "GraphEdgeData.hpp"
+#include "GraphNode.hpp"
 
-namespace OrcaSeer::Graph {
+namespace Orca::RTGen {
 
 class GraphNode;
 
@@ -52,6 +52,6 @@ class GraphEdge{
     GraphEdgeData* getData();
 };
 
-}  // namespace OrcaSeer::Graph
+}  // namespace Orca::RTGen
 
 #endif  // SIM_INCLUDE_GRAPHEDGE_HPP_

@@ -24,14 +24,13 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#include "../../orca-rtgen/include/Graph.hpp"
-
 #include <list>
 
-#include "../../orca-rtgen/include/GraphEdge.hpp"
-#include "../../orca-rtgen/include/GraphNode.hpp"
+#include "Graph.hpp"
+#include "GraphEdge.hpp"
+#include "GraphNode.hpp"
 
-namespace OrcaSeer::Graph {
+namespace Orca::RTGen {
 
 Graph::Graph() {
     this->edges = new std::list<GraphEdge*>();
@@ -93,27 +92,34 @@ Graph::~Graph() {
 std::string Graph::ToString() {
     std::stringstream ss;
 
-    std::list<OrcaSeer::Graph::GraphNode*>::iterator i;
+    std::list<GraphNode*>::iterator i;
 
-    ss << "NODES ========================================" << std::endl;
-    OrcaSeer::Graph::GraphNodeData data;
+    ss << "================== NODES ====================" << std::endl;
+    ss << "id \tlabel \tmap \tPCD " << std::endl;
+    ss << "---------------------------------------------" << std::endl;
+    GraphNodeData data;
     for (i = nodes->begin(); i != nodes->end(); i++) {
         data = *((*i)->getData());
-        ss << data.id << "\t" << data.name << " "
-            << "\t\t\t" << data.cpDever << std::endl;
+        ss << data.id << "\t" << data.label << "\t" << data.node << "\t"
+            << data.period << ", " << data.capacity << ", "
+			<< data.deadline << std::endl;
     }
 
     if (nodes->size() == 0) ss << "none" << std::endl;
 
-    std::list<OrcaSeer::Graph::GraphEdge*>::iterator j;
+    std::list<GraphEdge*>::iterator j;
 
-    ss << "EDGES ========================================" << std::endl;
-    OrcaSeer::Graph::GraphEdgeData edata;
+    ss << "================== EDGES ====================" << std::endl;
+    ss << "id \tsource \ttarget \tPCD " << std::endl;
+    ss << "---------------------------------------------" << std::endl;
+    GraphEdgeData edata;
     for (j = edges->begin(); j != edges->end(); j++) {
         edata = *((*j)->getData());
-        ss << (*j)->getFrom()->getData()->name
-            << "\t" << (*j)->getTo()->getData()->name
-            << edata.dataTransferTime << std::endl;
+
+        ss << edata.id << "\t" << (*j)->getFrom()->getData()->label
+            << "\t" << (*j)->getTo()->getData()->label << "\t"
+            << edata.period << ", " << edata.capacity << ", "
+			<< edata.deadline << std::endl;
     }
 
     if (edges->size() == 0) ss << "none" << std::endl;
@@ -123,4 +129,4 @@ std::string Graph::ToString() {
     return ss.str();
 }
 
-}  // namespace OrcaSeer::Graph
+}  // namespace Orca::RTGen

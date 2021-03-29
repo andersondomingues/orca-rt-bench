@@ -30,14 +30,13 @@
 #include <string>
 #include <sstream>
 
-namespace OrcaSeer::Graph {
+namespace Orca::RTGen {
 
 struct GraphEdgeData{
-    uint32_t dataTransferTime;
-
-    inline GraphEdgeData() {
-        dataTransferTime = 0;
-    }
+    uint32_t id = 0;
+    float period = 0;
+    float capacity = 0;
+    float deadline = 0;
 };
 
 }  // namespace OrcaSeer::Graph

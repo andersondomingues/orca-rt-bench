@@ -24,12 +24,12 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#include "../../orca-rtgen/include/GraphEdge.hpp"
+#include "GraphEdge.hpp"
 
-#include "../../orca-rtgen/include/GraphEdgeData.hpp"
-#include "../../orca-rtgen/include/GraphNode.hpp"
+#include "GraphEdgeData.hpp"
+#include "GraphNode.hpp"
 
-namespace OrcaSeer::Graph {
+namespace Orca::RTGen {
 
 GraphEdge::GraphEdge() {
     this->from = nullptr;
@@ -61,4 +61,4 @@ void GraphEdge::setTo(GraphNode* node) {
     this->to = node;
 }
 
-}  // namespace OrcaSeer::Graph
+}  // namespace Orca::RTGen

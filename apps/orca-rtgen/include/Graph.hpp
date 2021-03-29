@@ -30,10 +30,10 @@
 #include <list>
 #include <string>
 
-#include "../../orca-rtgen/include/GraphEdge.hpp"
-#include "../../orca-rtgen/include/GraphNode.hpp"
+#include "GraphEdge.hpp"
+#include "GraphNode.hpp"
 
-namespace OrcaSeer::Graph {
+namespace Orca::RTGen {
 
 class Graph{
  private:
@@ -51,6 +51,6 @@ class Graph{
     std::string ToString();
 };
 
-}  // namespace OrcaSeer::Graph
+}  // namespace Orca::RTGen
 
 #endif  // SIM_INCLUDE_GRAPH_HPP_

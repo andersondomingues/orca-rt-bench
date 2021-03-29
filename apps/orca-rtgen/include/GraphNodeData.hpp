@@ -29,19 +29,17 @@
 
 #include <string>
 
-namespace OrcaSeer::Graph {
+namespace Orca::RTGen {
 
 struct GraphNodeData{
     uint32_t id;
-    std::string name;
-
-    float cpDever;
-    float cpA56;
-    float cpGPU;
-    float deadline;
+    uint32_t node;
     float period;
+    float capacity;
+    float deadline;
+    std::string label;
 };
 
-}  // namespace OrcaSeer::Graph
+}  // namespace Orca::RTGen
 
 #endif  // SIM_INCLUDE_GRAPHNODEDATA_HPP_
