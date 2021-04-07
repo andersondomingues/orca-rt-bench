@@ -25,24 +25,29 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
 #include "GraphNode.hpp"
+#include "GraphNodeData.hpp"
 
 #include "GraphEdge.hpp"
-#include "GraphNodeData.hpp"
 
 namespace Orca::RTGen {
 
 GraphNode::GraphNode() {
     this->from = nullptr;
     this->to = nullptr;
-    this->data = GraphNodeData();
+    this->data = nullptr;
 }
 
 GraphNode::~GraphNode() {
     // nothing
 }
 
+void GraphNode::setData(GraphNodeData* data) {
+    this->data = data;
+}
+
+
 GraphNodeData* GraphNode::getData() {
-    return &(this->data);
+    return this->data;
 }
 
 std::list<GraphEdge>* GraphNode::getTo() {

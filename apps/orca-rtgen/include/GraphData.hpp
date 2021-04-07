@@ -24,17 +24,19 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
-#ifndef ORCA_RTGEN_GRAPHNODEDATA_HPP_
-#define ORCA_RTGEN_GRAPHNODEDATA_HPP_
+#ifndef ORCA_RTGEN_GRAPHDATA_HPP_
+#define ORCA_RTGEN_GRAPHDATA_HPP_
 
 #include <string>
 
+#include "Graph.hpp"
+
 namespace Orca::RTGen {
 
-struct GraphNodeData {
-	//abstract structure, no members
+struct GraphData {
+	//abstract class, no members
 };
 
 }  // namespace Orca::RTGen
 
-#endif  // ORCA_RTGEN_GRAPHNODEDATA_HPP_
+#endif  // ORCA_RTGEN_GRAPHDATA_HPP_

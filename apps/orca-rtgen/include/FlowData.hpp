@@ -22,19 +22,25 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef ORCA_RTGEN_GRAPHNODEDATA_HPP_
-#define ORCA_RTGEN_GRAPHNODEDATA_HPP_
+#ifndef ORCA_RTGEN_FLOWDATA_HPP_
+#define ORCA_RTGEN_FLOWDATA_HPP_
 
 #include <string>
+#include <sstream>
+
+#include "GraphEdgeData.hpp"
 
 namespace Orca::RTGen {
 
-struct GraphNodeData {
-	//abstract structure, no members
+struct FlowData: public GraphEdgeData {
+    uint32_t id = 0;
+    float period = 0;
+    float capacity = 0;
+    float deadline = 0;
 };
 
 }  // namespace Orca::RTGen
 
-#endif  // ORCA_RTGEN_GRAPHNODEDATA_HPP_
+#endif  // ORCA_RTGEN_FLOWDATA_HPP_

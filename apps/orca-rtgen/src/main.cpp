@@ -25,14 +25,59 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
 #include <iostream>
+#include <map>
 
+#include "TaskData.hpp"
+#include "FlowData.hpp"
 #include "GraphFileHandler.hpp"
 
 #include "GraphEdge.hpp"
 #include "GraphNode.hpp"
-#include "GraphNodeData.hpp"
 
 using namespace Orca::RTGen;
+
+Graph* loadGraphFromFile(std::string filename){
+
+	Graph* graph = GraphFileHandler::loadFromFile(filename);
+
+	std::list<GraphNode*>::iterator i, j;
+
+	std::cout << "===================================================" << std::endl;
+	std::cout << "ID \tLabel \tNode \tT \tCp \tDeadline" << std::endl;
+	std::cout << "---------------------------------------------------" << std::endl;
+
+	for(i = graph->getNodes()->begin(), j = graph->getNodes()->end(); i != j; i++){
+		TaskData* data = static_cast<TaskData*>((*i)->getData());
+		std::cout << data->id << '\t' << data->label <<
+				'\t' << data->node << '\t' << data->period <<
+				'\t' << data->capacity << '\t' << data->deadline <<
+				std::endl;
+	}
+
+	std::list<GraphEdge*>::iterator k, l;
+
+	std::cout << "---------------------------------------------------" << std::endl;
+	std::cout << "ID \tSource \tTarget \tT \tCp \tDeadline" << std::endl;
+	std::cout << "---------------------------------------------------" << std::endl;
+
+	for(k = graph->getEdges()->begin(), l = graph->getEdges()->end(); k != l; k++){
+
+		TaskData *fromData, *toData;
+		fromData = static_cast<TaskData*>((*k)->getFrom()->getData());
+		toData   = static_cast<TaskData*>((*k)->getTo()->getData());
+
+		FlowData* data = static_cast<FlowData*>((*k)->getData());
+
+		std::cout << data->id << '\t' << fromData->label <<
+				'\t' << toData->label << '\t' << data->period <<
+				'\t' << data->capacity << '\t' << data->deadline <<
+				std::endl;
+	}
+
+	std::cout << "===================================================" << std::endl;
+
+	return graph;
+}
 
 int main(int argc, char** argv){
 
@@ -49,16 +94,20 @@ int main(int argc, char** argv){
 		return -1;
 	}
 
-    std::cout << "===> Step 1 - Parsing entered file..."
-    		<< std::endl << std::endl;
+    std::cout << "===> Step 1 - Parsing entered file..." << std::endl;
+    Graph* taskGraph = loadGraphFromFile(taskGraphFile);
 
-    Graph* taskGraph = GraphFileHandler::loadFromFile(taskGraphFile);
-    std::cout << taskGraph->ToString() << std::endl;
+    std::cout << "===> Step 2 - Generate flows..."
+       		<< std::endl << std::endl;
 
-//    std::cout << "===> Step 2 - Generate flows..."
-//       		<< std::endl << std::endl;
-////
-//    std::map<int, NetworkFlow>
+//    std::list<GraphEdge*>::iterator i, j;
+//    std::map<int, Graph*> flows;
+//    Graph* curr_flow;
+//
+//    for(i = taskGraph->getEdges()->begin(), j = taskGraph->getEdges()->end(); i != j; i++)
+//    	flows[flows.size()] = HermesFlowGenerator::generateFromGraph(
+//    			taskGraph, (*i)->getFrom(), (*i)->getTo());
+
 
     delete taskGraph;
 }
