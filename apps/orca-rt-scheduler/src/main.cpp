@@ -32,6 +32,7 @@
 #include "Graph.hpp"
 #include "GraphFileHandler.hpp"
 #include "SimulationEngine.hpp"
+#include "RateMonotonic.hpp"
 #include "EarliestDeadlineFirst.hpp"
 #include "LeastSlackTime.hpp"
 
@@ -39,13 +40,14 @@ int main(int argc, char** argv) {
     //
     int ticks;
     std::string graphFile;
-
+	std::string schedulingAlgorithmName;
     // check on arguments
     try {
-        if (argc != 3) throw std::runtime_error("");
+        if (argc != 4) throw std::runtime_error("");
 
         ticks = std::stoi(argv[1], nullptr, 10);
         graphFile = std::string(argv[2]);
+		schedulingAlgorithmName = std::string(argv[3]);
     } catch (std::exception& e) {
         std::cout << "Usage:" << std::endl;
         std::cout << "\t" << std::string(argv[0]);
@@ -64,9 +66,19 @@ int main(int argc, char** argv) {
 
     std::cout << graph->ToString() << std::endl;
 
-    OrcaSeer::Task::SchedulingAlgorithm* edf
-        = new OrcaSeer::Task::EarliestDeadlineFirst();
-
+    OrcaSeer::Task::SchedulingAlgorithm* edf; 
+	
+	// Scheduling Algorthm check
+	if(schedulingAlgorithmName == "RM"){
+		
+		edf = new OrcaSeer::Task::RateMonotonic();
+	
+	}else if(schedulingAlgorithmName == "EDF"){
+		
+		 edf = new OrcaSeer::Task::EarliestDeadlineFirst();
+		 
+	}
+	
     OrcaSeer::Simulation::SimulationEngine* engine
         = new OrcaSeer::Simulation::SimulationEngine(graph, edf);
 
