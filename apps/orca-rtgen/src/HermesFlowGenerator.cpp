@@ -24,17 +24,21 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
-#ifndef ORCA_RTGEN_GRAPHNODEDATA_HPP_
-#define ORCA_RTGEN_GRAPHNODEDATA_HPP_
+#include "HermesFlowGenerator.hpp"
 
-#include <string>
+#include "Graph.hpp"
+#include "GraphNode.hpp"
+#include "GraphEdge.hpp"
+
 
 namespace Orca::RTGen {
 
-struct GraphNodeData {
-	//abstract structure, no members
-};
+Graph* HermesFlowGenerator::generateFromGraph(Graph*, GraphNode* source, GraphNode* target) {
+	Graph* flow = new Graph();
+
+	//add source node to the flow
+	flow->addNode(source);
+	return nullptr;
+}
 
 }  // namespace Orca::RTGen
-
-#endif  // ORCA_RTGEN_GRAPHNODEDATA_HPP_

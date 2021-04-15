@@ -24,13 +24,13 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#ifndef SIM_INCLUDE_GRAPHEDGE_HPP_
-#define SIM_INCLUDE_GRAPHEDGE_HPP_
+#ifndef ORCA_RTGEN_GRAPHEDGE_HPP_
+#define ORCA_RTGEN_GRAPHEDGE_HPP_
 
 #include <string>
 
-#include "GraphEdgeData.hpp"
 #include "GraphNode.hpp"
+#include "GraphEdgeData.hpp"
 
 namespace Orca::RTGen {
 
@@ -40,18 +40,21 @@ class GraphEdge{
  private:
     GraphNode* from;
     GraphNode* to;
-    GraphEdgeData data;
+    GraphEdgeData* data;
 
  public:
     GraphEdge();
     ~GraphEdge();
+
+    void setData(GraphEdgeData* data);
+    GraphEdgeData* getData();
+
     void setFrom(GraphNode* node);
     void setTo(GraphNode* node);
     GraphNode* getFrom();
     GraphNode* getTo();
-    GraphEdgeData* getData();
 };
 
 }  // namespace Orca::RTGen
 
-#endif  // SIM_INCLUDE_GRAPHEDGE_HPP_
+#endif  // ORCA_RTGEN_GRAPHEDGE_HPP_

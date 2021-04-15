@@ -27,12 +27,16 @@
 #include <list>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 #include "GraphFileHandler.hpp"
 
+#include "Graph.hpp"
 #include "GraphEdge.hpp"
 #include "GraphNode.hpp"
-#include "Graph.hpp"
+#include "TaskData.hpp"
+#include "FlowData.hpp"
+
 
 #define ENDL '\n'
 
@@ -48,7 +52,8 @@ namespace Orca::RTGen {
 #define EDGE_HEADER "[edges]"
 
 Graph* GraphFileHandler::loadFromFile(std::string filename) {
-    Graph* graph = new Graph();
+
+	Graph* graph = new Graph();
 
     std::ifstream file;
     file.open(filename);
@@ -81,12 +86,15 @@ Graph* GraphFileHandler::loadFromFile(std::string filename) {
 
             case PARSE_NODES: {
                 GraphNode* node = new GraphNode();
-                ss >> node->getData()->id;
-                ss >> node->getData()->label;
-                ss >> node->getData()->period;
-                ss >> node->getData()->capacity;
-                ss >> node->getData()->deadline;
-                ss >> node->getData()->node;
+                TaskData* data = new TaskData();
+                ss >> data->id;
+                ss >> data->label;
+                ss >> data->period;
+                ss >> data->capacity;
+                ss >> data->deadline;
+                ss >> data->node;
+
+                node->setData(data);
 
                 graph->addNode(node);
             } break;
@@ -96,24 +104,40 @@ Graph* GraphFileHandler::loadFromFile(std::string filename) {
 
             case PARSE_EDGES: {
                 GraphEdge* edge = new GraphEdge();
-                int from, to;
-                ss >> edge->getData()->id;
-                ss >> from;
-                ss >> to;
-                ss >> edge->getData()->period;
-                ss >> edge->getData()->capacity;
-                ss >> edge->getData()->deadline;
+                FlowData* data = new FlowData();
 
-                GraphNode *nfrom, *nto;
+                ss >> data->id;
+
+                uint32_t from, to;
+			    ss >> from;
+			    ss >> to;
+
+                ss >> data->period;
+                ss >> data->capacity;
+                ss >> data->deadline;
+
+                edge->setData(data);
+
                 std::list<GraphNode*>* nodes = graph->getNodes();
                 std::list<GraphNode*>::iterator i;
+
+                char found = 0x0;
                 for (i = nodes->begin(); i != nodes->end(); i++) {
-                    if ((*i)->getData()->id == from) {
+
+                	TaskData* data = static_cast<TaskData*>((*i)->getData());
+
+                    if (data->id == from) {
                         edge->setFrom(*i);
-                    } else if ((*i)->getData()->id == to) {
+                        found |= 0x1;
+                    } else if (data->id == to) {
                         edge->setTo(*i);
+                        found |= 0x2;
                     }
+
+                    if(found == 0x3)
+                    	break;
                 }
+
                 graph->addEdge(edge);
             } break;
 

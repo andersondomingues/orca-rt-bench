@@ -8,7 +8,7 @@
  * http://https://github.com/andersondomingues/orca-tools
  * http://https://github.com/andersondomingues/orca-modeling
  *
- * Copyright (C) 2018-2020 Anderson Domingues, <ti.andersondomingues@gmail.com>
+ * Copyright (C) 2018-2021 Anderson Domingues, <ti.andersondomingues@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
-#ifndef SIM_INCLUDE_GRAPHFILEHANDLER_HPP_
-#define SIM_INCLUDE_GRAPHFILEHANDLER_HPP_
+#ifndef ORCA_RTGEN_GRAPHFILEHANDLER_HPP_
+#define ORCA_RTGEN_GRAPHFILEHANDLER_HPP_
 
 #include <string>
 
@@ -41,4 +41,4 @@ class GraphFileHandler {
 
 }  // namespace Orca::RTGen
 
-#endif  // SIM_INCLUDE_GRAPHFILEHANDLER_HPP_
+#endif  // ORCA_RTGEN_GRAPHFILEHANDLER_HPP_
