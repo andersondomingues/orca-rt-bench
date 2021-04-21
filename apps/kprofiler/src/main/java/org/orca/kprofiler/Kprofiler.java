@@ -107,9 +107,6 @@ public class Kprofiler extends JFrame implements ActionListener {
 		menuItem.setActionCommand("about_orca_active");
 		menuItem.addActionListener(this);
 		menu4.add(menuItem);
-		
-		
-		//Item de menu - Help = nele estará o tutorial de uso do orca e falar sobre o Prof. Sergio e o kprofiller
 
 		return menuBar;
 	}
@@ -131,49 +128,38 @@ public class Kprofiler extends JFrame implements ActionListener {
 		if (file == null){
 			JOptionPane.showMessageDialog(desktop, "You should open a schedule file first!");
 		}else{
-			String[] items = {"0.1ms", "0.5ms", "1ms", "2ms", "10ms"}; // Opcoes selecionaveis 
+			String[] items = {"0.1ms", "0.5ms", "1ms", "2ms", "10ms"}; 
 			JComboBox combo = new JComboBox(items);
-			combo.setSelectedItem("1ms");	// Opcao inicial das selecionaveis
-			JTextField field1 = new JTextField("0.000"); // Caixa de texto que permite input
-			JPanel panel = new JPanel(new GridLayout(0, 1));		// Painel das opcoes selecionaveis
-			panel.add(new JLabel("Resolution:"));	// nome do painel das opcoes selecionaveis
-			panel.add(combo);	// adiciona as opcoes selecionaveis ao painel
+			combo.setSelectedItem("1ms");	
+			JTextField field1 = new JTextField("0.000");
+			JPanel panel = new JPanel(new GridLayout(0, 1));
+			panel.add(new JLabel("Resolution:"));
+			panel.add(combo);
 
-			panel.add(new JLabel("Start time (ms):")); // nome do painel de input de ms
-			panel.add(field1);						// adiciona o campo de input ao painel
+			panel.add(new JLabel("Start time (ms):")); 
+			panel.add(field1);
 			int result = JOptionPane.showConfirmDialog(null, panel, "Trace plot",
-			JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE); //JOptionPane.OK_CANCEL_OPTION == painel com duas opcoes, ok e cancel - USAR
+			JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 			if (result == JOptionPane.OK_OPTION) {
 				createFrame(file.getAbsolutePath(), Float.parseFloat(field1.getText()), combo.getSelectedItem().toString());
 			}
 		}
 	}
 	if("orca_active".equals(e.getActionCommand())){
-			ProcessBuilder processBuilder = new ProcessBuilder();
-		
-				// Opcoes de algoritmos de escalonamento	
+			ProcessBuilder processBuilder = new ProcessBuilder();	
 				
-			String[] schedulingalgorithms = {"EDF", "RM"}; 			// Opcoes selecionaveis 
+			String[] schedulingalgorithms = {"EDF", "RM"}; 	 
 			JComboBox comboschedulingalgorithms = new JComboBox(schedulingalgorithms);
-			comboschedulingalgorithms.setSelectedItem("EDF");		// Opcao inicial das selecionaveis
-			JPanel panel = new JPanel(new GridLayout(0, 1));		// Painel das opcoes selecionaveis
-			panel.add(new JLabel("Scheduling Algorithm"));			// nome do painel das opcoes selecionaveis
-			panel.add(comboschedulingalgorithms);					// adiciona as opcoes selecionaveis ao painel
+			comboschedulingalgorithms.setSelectedItem("EDF");
+			JPanel panel = new JPanel(new GridLayout(0, 1));
+			panel.add(new JLabel("Scheduling Algorithm"));
+			panel.add(comboschedulingalgorithms);
 
 			
+			JTextField field1ms = new JTextField("0.000");  	
+			panel.add(new JLabel("Execution time (ms)"));  		
+			panel.add(field1ms);		
 				
-				
-				
-				// Tempo de execucacao desejado (em ms)
-			
-			JTextField field1ms = new JTextField("0.000");  	// Caixa de texto que permite input
-			panel.add(new JLabel("Execution time (ms)"));  		// nome do painel de input de ms
-			panel.add(field1ms);								// adiciona o campo de input ao painel
-				
-				
-				
-				
-				// Arquivo exemplo que deseja aplicar o algoritmo de escalonamento (Navegar e selecionar o arquivo)
 				
 			panel.add(new JLabel("Data File"));
 			JButton b=new JButton("Select the data file to run the scheduling algortihm on");  
@@ -193,14 +179,11 @@ public class Kprofiler extends JFrame implements ActionListener {
 			String pathdir = System.getProperty("user.dir");
 			pathdir = pathdir.replaceAll("\\\\", "/");
 			
-			
-			  // Caixa de texto que permite input
 			int result = JOptionPane.showConfirmDialog(null, panel, "Orca Scheduler",
 			JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE); //JOptionPane.OK_CANCEL_OPTION == painel com duas opcoes, ok e cancel - USAR
 			
 			if (result == JOptionPane.OK_OPTION && orcaDatafile != null) {
-				//i can keep using / as file separator since it works for both windows and linux
-				// i will use fieldpathgeneric and add /examplename since it all be at the same directory 
+				
 				processBuilder.command("cmd.exe", "/c", pathdir + "/orca-rt-scheduler.exe", field1ms.getText(), orcaDatafile.getPath(), comboschedulingalgorithms.getSelectedItem().toString()).directory(new File(pathdir));
 				
 				try{
