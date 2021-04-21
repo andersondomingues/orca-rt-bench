@@ -26,7 +26,8 @@
 ******************************************************************************/
 #include <queue>
 #include <iostream>
-
+#include <filesystem>
+#include <fstream>
 #include "SimulationEngine.hpp"
 #include "SystemEvent.hpp"
 #include "SchedulingAlgorithm.hpp"
@@ -42,7 +43,6 @@ SimulationEngine::SimulationEngine(OrcaSeer::Graph::Graph* graph,
  OrcaSeer::Task::SchedulingAlgorithm* algo) {
     this->systemTime = 0;  // system starts at second zero
     this->queue = new std::priority_queue<SystemEvent>();
-
     this->running = new std::list<OrcaSeer::Task::TaskControlBlock*>();
     this->blocked = new std::list<OrcaSeer::Task::TaskControlBlock*>();
     this->ready = new std::list<OrcaSeer::Task::TaskControlBlock*>();
@@ -152,9 +152,14 @@ SimulationTime SimulationEngine::Simulate(SimulationTime milliseconds) {
         PrintTaskLists();
         //
     } while (this->systemTime < milliseconds);
-
-    handler.saveToFile("bin/output.kprofiler");
-
+	
+	
+	std::filesystem::path cwd = std::filesystem::current_path();
+	cwd /= "output.orca";
+	std::ofstream file(cwd);
+	std::cout << "path final" << cwd.string() << std::endl;
+    handler.saveToFile(cwd.string());
+	
     return this->systemTime;
 }
 

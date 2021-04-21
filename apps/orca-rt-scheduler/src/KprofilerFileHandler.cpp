@@ -57,8 +57,11 @@ bool KprofilerFileHandler::saveToFile(std::string filename) {
     std::ofstream file;
     file.open(filename);
 
-    if (!file.is_open()) return false;
-
+	if (!file.is_open()){ 
+	std::cout << "Nao foi possivel gerar o arquivo output.kprofiler" << std::endl;
+	return false;
+	}
+	std::cout << "Arquivo output.kprofiler gerado" << std::endl;
     // sort entries by starting time
     this->data.sort([]
         (const KprofilerLineData e1, const KprofilerLineData e2){

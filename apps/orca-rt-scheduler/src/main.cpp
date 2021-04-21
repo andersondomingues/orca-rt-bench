@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
     } catch (std::exception& e) {
         std::cout << "Usage:" << std::endl;
         std::cout << "\t" << std::string(argv[0]);
-        std::cout << " <ticks> <graph file> [<algorithm>=EDF]" << std::endl;
+        std::cout << " <ticks> <graph file> [<algorithm>=EDF or RM]" << std::endl;
         std::cout << std::flush;
         return -1;
     }

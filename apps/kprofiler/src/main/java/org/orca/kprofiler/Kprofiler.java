@@ -8,18 +8,22 @@ import javax.swing.JMenuBar;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.GridLayout;
+import java.io.IOException;
+import java.lang.ProcessBuilder;
+import java.lang.Object;
 
 public class Kprofiler extends JFrame implements ActionListener {
 	JDesktopPane desktop;
 	File file;
-
+	File orcaDatafile;
 	public Kprofiler() {
-		super("HellfireOS Kernel Profiler");
+		super("Orca RT-Bench");
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds(50, 50, 850, 350);
@@ -43,7 +47,7 @@ public class Kprofiler extends JFrame implements ActionListener {
 		menu1.setMnemonic(KeyEvent.VK_F);
 		menuBar.add(menu1);
 
-		menuItem = new JMenuItem("Open trace");
+		menuItem = new JMenuItem("Open schedule file");
 		menuItem.setMnemonic(KeyEvent.VK_O);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_O, ActionEvent.ALT_MASK));
@@ -51,7 +55,7 @@ public class Kprofiler extends JFrame implements ActionListener {
 		menuItem.addActionListener(this);
 		menu1.add(menuItem);
 
-		menuItem = new JMenuItem("Close trace");
+		menuItem = new JMenuItem("Close schedule file");
 		menuItem.setMnemonic(KeyEvent.VK_C);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_C, ActionEvent.ALT_MASK));
@@ -67,17 +71,9 @@ public class Kprofiler extends JFrame implements ActionListener {
 		menuItem.addActionListener(this);
 		menu1.add(menuItem);
 
-		JMenu menu2 = new JMenu("Trace");
+		JMenu menu2 = new JMenu("Schedule");
 		menu1.setMnemonic(KeyEvent.VK_T);
 		menuBar.add(menu2);
-
-		menuItem = new JMenuItem("Analyze");
-		menuItem.setMnemonic(KeyEvent.VK_A);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(
-				KeyEvent.VK_A, ActionEvent.ALT_MASK));
-		menuItem.setActionCommand("trace_analyze");
-		menuItem.addActionListener(this);
-		menu2.add(menuItem);
 
 		menuItem = new JMenuItem("Plot");
 		menuItem.setMnemonic(KeyEvent.VK_P);
@@ -86,6 +82,34 @@ public class Kprofiler extends JFrame implements ActionListener {
 		menuItem.setActionCommand("trace_plot");
 		menuItem.addActionListener(this);
 		menu2.add(menuItem);
+		
+		
+		JMenu menu3 = new JMenu("Orca Scheduler");
+		menu1.setMnemonic(KeyEvent.VK_S);
+		menuBar.add(menu3);
+		
+		menuItem = new JMenuItem("Scheduling configuration");
+		menuItem.setMnemonic(KeyEvent.VK_B);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(
+				KeyEvent.VK_B, ActionEvent.ALT_MASK));
+		menuItem.setActionCommand("orca_active");
+		menuItem.addActionListener(this);
+		menu3.add(menuItem);
+		
+		
+		JMenu menu4 = new JMenu("Help");
+		menu1.setMnemonic(KeyEvent.VK_H);
+		menuBar.add(menu4);
+		menuItem = new JMenuItem("About the orca-rt-bench");
+		menuItem.setMnemonic(KeyEvent.VK_R);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(
+				KeyEvent.VK_R, ActionEvent.ALT_MASK));
+		menuItem.setActionCommand("about_orca_active");
+		menuItem.addActionListener(this);
+		menu4.add(menuItem);
+		
+		
+		//Item de menu - Help = nele estará o tutorial de uso do orca e falar sobre o Prof. Sergio e o kprofiller
 
 		return menuBar;
 	}
@@ -103,56 +127,102 @@ public class Kprofiler extends JFrame implements ActionListener {
 		file = null;
 	}
 
-	if ("trace_analyze".equals(e.getActionCommand())) {
-		if (file == null){
-			JOptionPane.showMessageDialog(desktop, "You should open a kernel trace file first!");
-		}else{
-			String[] items = {"One", "Two", "Three", "Four", "Five"};
-			JComboBox combo = new JComboBox(items);
-			JTextField field1 = new JTextField("1234.56");
-			JTextField field2 = new JTextField("9876.54");
-			JPanel panel = new JPanel(new GridLayout(0, 1));
-			panel.add(field1);
-			panel.add(combo);
-			panel.add(new JLabel("Field 1:"));
-			panel.add(field1);
-			panel.add(new JLabel("Field 2:"));
-			panel.add(field2);
-			int result = JOptionPane.showConfirmDialog(null, panel, "Test",
-			JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-			if (result == JOptionPane.OK_OPTION) {
-				System.out.println(combo.getSelectedItem()
-					+ " " + field1.getText()
-					+ " " + field2.getText());
-			} else {
-				System.out.println("Cancelled");
-			}
-		}
-	}
 	if ("trace_plot".equals(e.getActionCommand())) {
 		if (file == null){
-			JOptionPane.showMessageDialog(desktop, "You should open a kernel trace file first!");
+			JOptionPane.showMessageDialog(desktop, "You should open a schedule file first!");
 		}else{
-			String[] items = {"0.1ms", "0.5ms", "1ms", "2ms", "10ms"};
+			String[] items = {"0.1ms", "0.5ms", "1ms", "2ms", "10ms"}; // Opcoes selecionaveis 
 			JComboBox combo = new JComboBox(items);
-			combo.setSelectedItem("1ms");
-			JTextField field1 = new JTextField("0.000");
-			JPanel panel = new JPanel(new GridLayout(0, 1));
-			panel.add(new JLabel("Resolution:"));
-			panel.add(combo);
+			combo.setSelectedItem("1ms");	// Opcao inicial das selecionaveis
+			JTextField field1 = new JTextField("0.000"); // Caixa de texto que permite input
+			JPanel panel = new JPanel(new GridLayout(0, 1));		// Painel das opcoes selecionaveis
+			panel.add(new JLabel("Resolution:"));	// nome do painel das opcoes selecionaveis
+			panel.add(combo);	// adiciona as opcoes selecionaveis ao painel
 
-			panel.add(new JLabel("Start time (ms):"));
-			panel.add(field1);
+			panel.add(new JLabel("Start time (ms):")); // nome do painel de input de ms
+			panel.add(field1);						// adiciona o campo de input ao painel
 			int result = JOptionPane.showConfirmDialog(null, panel, "Trace plot",
-			JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE); //JOptionPane.OK_CANCEL_OPTION == painel com duas opcoes, ok e cancel - USAR
 			if (result == JOptionPane.OK_OPTION) {
 				createFrame(file.getAbsolutePath(), Float.parseFloat(field1.getText()), combo.getSelectedItem().toString());
 			}
 		}
 	}
-	if ("file_quit".equals(e.getActionCommand())) {
-			quit();
+	if("orca_active".equals(e.getActionCommand())){
+			ProcessBuilder processBuilder = new ProcessBuilder();
+		
+				// Opcoes de algoritmos de escalonamento	
+				
+			String[] schedulingalgorithms = {"EDF", "RM"}; 			// Opcoes selecionaveis 
+			JComboBox comboschedulingalgorithms = new JComboBox(schedulingalgorithms);
+			comboschedulingalgorithms.setSelectedItem("EDF");		// Opcao inicial das selecionaveis
+			JPanel panel = new JPanel(new GridLayout(0, 1));		// Painel das opcoes selecionaveis
+			panel.add(new JLabel("Scheduling Algorithm"));			// nome do painel das opcoes selecionaveis
+			panel.add(comboschedulingalgorithms);					// adiciona as opcoes selecionaveis ao painel
+
+			
+				
+				
+				
+				// Tempo de execucacao desejado (em ms)
+			
+			JTextField field1ms = new JTextField("0.000");  	// Caixa de texto que permite input
+			panel.add(new JLabel("Execution time (ms)"));  		// nome do painel de input de ms
+			panel.add(field1ms);								// adiciona o campo de input ao painel
+				
+				
+				
+				
+				// Arquivo exemplo que deseja aplicar o algoritmo de escalonamento (Navegar e selecionar o arquivo)
+				
+			panel.add(new JLabel("Data File"));
+			JButton b=new JButton("Select the data file to run the scheduling algortihm on");  
+			b.setBounds(50,100,95,30);  
+			b.addActionListener(new ActionListener(){  
+					public void actionPerformed(ActionEvent e){  
+						JFileChooser fc = new JFileChooser();
+						int returnVal = fc.showOpenDialog(Kprofiler.this);
+						if (returnVal == JFileChooser.APPROVE_OPTION) {
+								orcaDatafile = fc.getSelectedFile();
+								b.setText(orcaDatafile.getPath());
+							}  
+						}  
+					}); 
+			panel.add(b);
+			
+			String pathdir = System.getProperty("user.dir");
+			pathdir = pathdir.replaceAll("\\\\", "/");
+			
+			
+			  // Caixa de texto que permite input
+			int result = JOptionPane.showConfirmDialog(null, panel, "Orca Scheduler",
+			JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE); //JOptionPane.OK_CANCEL_OPTION == painel com duas opcoes, ok e cancel - USAR
+			
+			if (result == JOptionPane.OK_OPTION && orcaDatafile != null) {
+				//i can keep using / as file separator since it works for both windows and linux
+				// i will use fieldpathgeneric and add /examplename since it all be at the same directory 
+				processBuilder.command("cmd.exe", "/c", pathdir + "/orca-rt-scheduler.exe", field1ms.getText(), orcaDatafile.getPath(), comboschedulingalgorithms.getSelectedItem().toString()).directory(new File(pathdir));
+				
+				try{
+					Process process = processBuilder.start();
+						}catch(IOException deuruim){
+													quit();
+					}
+					
+			}else if(result == JOptionPane.OK_OPTION && orcaDatafile == null){
+				JOptionPane.showMessageDialog(panel,"You should select a schedule data file first!");
+				}
+				
+		file = new File(pathdir+"/output.orca");
+		
 	}
+	if("about_orca_active".equals(e.getActionCommand())){
+		JOptionPane.showMessageDialog(desktop, "The Orca-RT-bench was develop by Anderson Domingues (ti.andersondomingues@gmail.com)\n\nThe graphical user interface was develop using the application kprofiller, provided by Professor Sergio F. Johann (sergio.johann@acad.pucrs.br)\n\nWith the help of Joao Benno (jbweber05@gmail.com) \n\n\n                                              Copyright (C) 2018-2021 Anderson Domingues <ti.andersondomingues@gmail.com> ");
+	}
+	
+	if("file_quit".equals(e.getActionCommand())) {
+			quit();
+		}
 	}
 
 	//Create a new internal frame.
