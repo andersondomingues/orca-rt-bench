@@ -24,84 +24,23 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#include <list>
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <string>
+#ifndef ORCA_RTGEN_FLOWDATA_HPP_
+#define ORCA_RTGEN_FLOWDATA_HPP_
 
-#include "IniFileHandler.hpp"
-#include "IniFile.hpp"
+#include <string>
+#include <sstream>
+
+#include "GraphEdgeData.hpp"
 
 namespace Orca::RTGen {
 
-#define ENDL '\n'
-
-IniFile* IniFileHandler::LoadFromFile(std::string filename) {
-
-	std::ifstream file;
-	std::string line, section, entry, value;
-
-	file.open(filename);
-	if (!file.is_open()) return nullptr;
-
-	// create new inifile
-	IniFile* ifile = new IniFile();
-
-	// scan lines
-	while (!file.eof() && std::getline(file, line)) {
-
-		// skip empty or comment lines
-		if (line[0] == '#' || line[0] == ENDL || line == "")
-			continue;
-
-		// select current section
-		if (line[0] == '[') {
-			section = line.substr(1, line.length() - 1);
-			continue;
-		}
-
-		// parse entry
-		std::stringstream ss = std::stringstream(line);
-		ss >> entry;
-		ss >> value;
-
-		// add entry to the list
-		ifile->SetEntry(section, entry, value);
-	}
-
-	file.close();
-	return ifile;
-}
-
-void IniFileHandler::SaveToFile(std::string filename, IniFile* ifile){
-
-	std::ofstream file;
-	std::stringstream ss;
-
-	file.open(filename);
-	if (!file.is_open()) return;
-
-	std::list<IniFileEntry*>::iterator i = ifile->Begin();
-	std::list<IniFileEntry*>::iterator j = ifile->End();
-
-	std::string curr_section;
-
-	for(; i != j; i++){
-
-		IniFileEntry* entry = *i;
-
-		// add header for new sections
-		if(entry->section != curr_section){
-			curr_section = entry->section;
-			file << "[" << curr_section << "]";
-		}
-
-
-		file << entry->section << " " << entry->value;
-
-	}
-
-}
+struct FlowData: public GraphEdgeData {
+    uint32_t id = 0;
+    float period = 0;
+    float capacity = 0;
+    float deadline = 0;
+};
 
 }  // namespace Orca::RTGen
+
+#endif  // ORCA_RTGEN_FLOWDATA_HPP_

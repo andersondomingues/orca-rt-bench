@@ -8,7 +8,7 @@
  * http://https://github.com/andersondomingues/orca-tools
  * http://https://github.com/andersondomingues/orca-modeling
  *
- * Copyright (C) 2018-2020 Anderson Domingues, <ti.andersondomingues@gmail.com>
+ * Copyright (C) 2018-2021 Anderson Domingues, <ti.andersondomingues@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,17 +24,17 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#include "../../orca-rtgen/include/GraphEdge.hpp"
+#include "GraphEdge.hpp"
+#include "GraphEdgeData.hpp"
 
-#include "../../orca-rtgen/include/GraphEdgeData.hpp"
-#include "../../orca-rtgen/include/GraphNode.hpp"
+#include "GraphNode.hpp"
 
-namespace OrcaSeer::Graph {
+namespace Orca::RTGen {
 
 GraphEdge::GraphEdge() {
     this->from = nullptr;
     this->to = nullptr;
-    this->data = GraphEdgeData();
+    this->data = nullptr;
 }
 
 GraphEdge::~GraphEdge() {
@@ -50,7 +50,11 @@ GraphNode* GraphEdge::getTo() {
 }
 
 GraphEdgeData* GraphEdge::getData() {
-    return &(this->data);
+    return this->data;
+}
+
+void GraphEdge::setData(GraphEdgeData* dataptr) {
+	this->data = dataptr;
 }
 
 void GraphEdge::setFrom(GraphNode* node) {
@@ -61,4 +65,4 @@ void GraphEdge::setTo(GraphNode* node) {
     this->to = node;
 }
 
-}  // namespace OrcaSeer::Graph
+}  // namespace Orca::RTGen

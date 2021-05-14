@@ -5,11 +5,12 @@
  *      Author: Admin
  */
 
-#ifndef APPS_ORCA_RTGEN_INCLUDE_MAIN_HPP_
-#define APPS_ORCA_RTGEN_INCLUDE_MAIN_HPP_
+#ifndef ORCA_RTGEN_MAIN_HPP_
+#define ORCA_RTGEN_MAIN_HPP_
 
 
+class Main {
 
+};
 
-
-#endif /* APPS_ORCA_RTGEN_INCLUDE_MAIN_HPP_ */
+#endif //  ORCA_RTGEN_MAIN_HPP_

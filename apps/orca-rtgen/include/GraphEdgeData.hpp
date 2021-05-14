@@ -8,7 +8,7 @@
  * http://https://github.com/andersondomingues/orca-tools
  * http://https://github.com/andersondomingues/orca-modeling
  *
- * Copyright (C) 2018-2020 Anderson Domingues, <ti.andersondomingues@gmail.com>
+ * Copyright (C) 2018-2021 Anderson Domingues, <ti.andersondomingues@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,24 +22,19 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
-#ifndef SIM_INCLUDE_GRAPHEDGEDATA_HPP_
-#define SIM_INCLUDE_GRAPHEDGEDATA_HPP_
+#ifndef ORCA_RTGEN_GRAPHEDGEDATA_HPP_
+#define ORCA_RTGEN_GRAPHEDGEDATA_HPP_
 
 #include <string>
-#include <sstream>
 
-namespace OrcaSeer::Graph {
+namespace Orca::RTGen {
 
-struct GraphEdgeData{
-    uint32_t dataTransferTime;
-
-    inline GraphEdgeData() {
-        dataTransferTime = 0;
-    }
+struct GraphEdgeData {
+	//abstract class, no members
 };
 
-}  // namespace OrcaSeer::Graph
+}  // namespace Orca::RTGen
 
-#endif  // SIM_INCLUDE_GRAPHEDGEDATA_HPP_
+#endif  // ORCA_RTGEN_GRAPHEDGEDATA_HPP_

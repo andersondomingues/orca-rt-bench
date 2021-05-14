@@ -24,103 +24,70 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#include "../../orca-rtgen/include/Graph.hpp"
-
 #include <list>
+#include <sstream>
 
-#include "../../orca-rtgen/include/GraphEdge.hpp"
-#include "../../orca-rtgen/include/GraphNode.hpp"
+#include "Graph.hpp"
+#include "GraphEdge.hpp"
+#include "GraphNode.hpp"
 
-namespace OrcaSeer::Graph {
+namespace Orca::RTGen {
 
 Graph::Graph() {
-    this->edges = new std::list<GraphEdge*>();
-    this->nodes = new std::list<GraphNode*>();
+    edges = new std::list<GraphEdge*>();
+    nodes = new std::list<GraphNode*>();
+    data = nullptr;
 }
 
 int Graph::addNode(GraphNode* node) {
-    this->nodes->push_front(node);
+    nodes->push_back(node);
     return 0;
 }
 
 int Graph::removeNode(GraphNode* node) {
-    this->nodes->remove(node);
+	nodes->remove(node);
     return 0;
 }
 
 int Graph::addEdge(GraphEdge* edge) {
-    GraphNode* node;
-    std::list<GraphNode*>* nodes = this->getNodes();
-    std::list<GraphNode*>::iterator i;
 
-    int mark = 0;
-    for (i = nodes->begin(); i != nodes->end(); i++) {
-        if (*i == edge->getTo())
-            mark++;
-        if (*i == edge->getFrom())
-            mark++;
-    }
+	char mark = 0;
 
-    if (mark == 2) {
-        this->edges->push_front(edge);
-        return 0;
+    std::list<GraphNode*>::iterator i, j;
+
+    for (i = nodes->begin(), j = nodes->end(); i != j; i++) {
+
+    	// found source in graph's node list, raise first bit flag "0000 0001"
+    	if (*i == edge->getTo()) mark |= 0x1;
+
+    	// found target in graph's node list, raise second bit flag "0000 0010"
+        if (*i == edge->getFrom()) mark |= 0x2;
+
+        // if both nodes were found ("0000 0011" is equals to 0x3), add edge to the graph
+        if (mark == 0x3) {
+            edges->push_back(edge);
+            return 0;
+        }
     }
 
     return 1;
 }
 
+Graph::~Graph() {
+	// nothing to do here
+}
+
+
 std::list<GraphNode*>* Graph::getNodes() {
-    return this->nodes;
+    return nodes;
 }
 
 std::list<GraphEdge*>* Graph::getEdges() {
-    return this->edges;
+    return edges;
 }
 
-Graph::~Graph() {
-    std::list<GraphNode*>::iterator i;
-    for (i = this->nodes->begin(); i != this->nodes->end(); i++)
-        delete *i;
-
-    std::list<GraphEdge*>::iterator j;
-    for (j = this->edges->begin(); j != this->edges->end(); j++)
-        delete *j;
-
-    delete this->nodes;
-    delete this->edges;
+GraphData* Graph::getData() {
+	return this->data;
 }
 
-std::string Graph::ToString() {
-    std::stringstream ss;
-
-    std::list<OrcaSeer::Graph::GraphNode*>::iterator i;
-
-    ss << "NODES ========================================" << std::endl;
-    OrcaSeer::Graph::GraphNodeData data;
-    for (i = nodes->begin(); i != nodes->end(); i++) {
-        data = *((*i)->getData());
-        ss << data.id << "\t" << data.name << " "
-            << "\t\t\t" << data.cpDever << std::endl;
-    }
-
-    if (nodes->size() == 0) ss << "none" << std::endl;
-
-    std::list<OrcaSeer::Graph::GraphEdge*>::iterator j;
-
-    ss << "EDGES ========================================" << std::endl;
-    OrcaSeer::Graph::GraphEdgeData edata;
-    for (j = edges->begin(); j != edges->end(); j++) {
-        edata = *((*j)->getData());
-        ss << (*j)->getFrom()->getData()->name
-            << "\t" << (*j)->getTo()->getData()->name
-            << edata.dataTransferTime << std::endl;
-    }
-
-    if (edges->size() == 0) ss << "none" << std::endl;
-
-    ss << "==============================================" << std::endl;
-
-    return ss.str();
-}
-
-}  // namespace OrcaSeer::Graph
+}  // namespace Orca::RTGen

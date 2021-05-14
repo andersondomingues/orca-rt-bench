@@ -8,7 +8,7 @@
  * http://https://github.com/andersondomingues/orca-tools
  * http://https://github.com/andersondomingues/orca-modeling
  *
- * Copyright (C) 2018-2020 Anderson Domingues, <ti.andersondomingues@gmail.com>
+ * Copyright (C) 2018-2021 Anderson Domingues, <ti.andersondomingues@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,23 +22,23 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
-#ifndef APPS_ORCA_RTGEN_SRC_INIFILEHANDLER_HPP_
-#define APPS_ORCA_RTGEN_SRC_INIFILEHANDLER_HPP_
+#ifndef ORCA_RTGEN_GRAPHFILEHANDLER_HPP_
+#define ORCA_RTGEN_GRAPHFILEHANDLER_HPP_
 
 #include <string>
 
-#include "IniFile.hpp"
+#include "Graph.hpp"
 
 namespace Orca::RTGen {
 
-class IniFileHandler {
+class GraphFileHandler {
  public:
-    static IniFile* LoadFromFile(std::string filename);
-    static void SaveToFile(std::string filename, IniFile* g);
+    static Graph* loadFromFile(std::string filename);
+    static void saveToFile(std::string filename, Graph* g);
 };
 
 }  // namespace Orca::RTGen
 
-#endif  // APPS_ORCA_RTGEN_SRC_INIFILEHANDLER_HPP_
+#endif  // ORCA_RTGEN_GRAPHFILEHANDLER_HPP_

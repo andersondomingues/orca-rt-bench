@@ -24,25 +24,30 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#include "../../orca-rtgen/include/GraphNode.hpp"
+#include "GraphNode.hpp"
+#include "GraphNodeData.hpp"
 
-#include "../../orca-rtgen/include/GraphEdge.hpp"
-#include "../../orca-rtgen/include/GraphNodeData.hpp"
+#include "GraphEdge.hpp"
 
-namespace OrcaSeer::Graph {
+namespace Orca::RTGen {
 
 GraphNode::GraphNode() {
     this->from = nullptr;
     this->to = nullptr;
-    this->data = GraphNodeData();
+    this->data = nullptr;
 }
 
 GraphNode::~GraphNode() {
     // nothing
 }
 
+void GraphNode::setData(GraphNodeData* data) {
+    this->data = data;
+}
+
+
 GraphNodeData* GraphNode::getData() {
-    return &(this->data);
+    return this->data;
 }
 
 std::list<GraphEdge>* GraphNode::getTo() {
@@ -53,4 +58,4 @@ std::list<GraphEdge>* GraphNode::getFrom() {
     return this->from;
 }
 
-}  // namespace OrcaSeer::Graph
+}  // namespace Orca::RTGen

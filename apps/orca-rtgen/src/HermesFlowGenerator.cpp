@@ -24,35 +24,21 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ******************************************************************************/
-#ifndef APPS_ORCA_RTGEN_SRC_INIFILE_HPP_
-#define APPS_ORCA_RTGEN_SRC_INIFILE_HPP_
+#include "HermesFlowGenerator.hpp"
 
-#include <string>
-#include <list>
+#include "Graph.hpp"
+#include "GraphNode.hpp"
+#include "GraphEdge.hpp"
+
 
 namespace Orca::RTGen {
 
-class IniFileEntry{
- public:
-	std::string section;
-	std::string entry;
-	std::string value;
-};
+Graph* HermesFlowGenerator::generateFromGraph(Graph*, GraphNode* source, GraphNode* target) {
+	Graph* flow = new Graph();
 
-class IniFile {
-private:
-	std::list<IniFileEntry*> entries;
+	//add source node to the flow
+	flow->addNode(source);
+	return nullptr;
+}
 
- public:
-	IniFileEntry* GetEntry(std::string section, std::string entry);
-	IniFileEntry* SetEntry(std::string section, std::string entry, std::string value);
-	std::list<IniFileEntry*>::iterator Begin();
-	std::list<IniFileEntry*>::iterator End();
-
-	IniFile();
-	~IniFile();
-};
-
-}  // namespace  Orca::RTGen
-
-#endif  // APPS_ORCA_RTGEN_SRC_INIFILE_HPP_
+}  // namespace Orca::RTGen
