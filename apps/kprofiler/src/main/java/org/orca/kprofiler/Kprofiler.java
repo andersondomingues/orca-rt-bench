@@ -148,7 +148,7 @@ public class Kprofiler extends JFrame implements ActionListener {
 	if("orca_active".equals(e.getActionCommand())){
 			ProcessBuilder processBuilder = new ProcessBuilder();	
 				
-			String[] schedulingalgorithms = {"EDF", "RM"}; 	 
+			String[] schedulingalgorithms = {"EDF", "RM", "LST"}; 	 
 			JComboBox comboschedulingalgorithms = new JComboBox(schedulingalgorithms);
 			comboschedulingalgorithms.setSelectedItem("EDF");
 			JPanel panel = new JPanel(new GridLayout(0, 1));

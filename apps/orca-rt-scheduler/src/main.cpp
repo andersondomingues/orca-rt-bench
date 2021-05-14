@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
     } catch (std::exception& e) {
         std::cout << "Usage:" << std::endl;
         std::cout << "\t" << std::string(argv[0]);
-        std::cout << " <ticks> <graph file> [<algorithm>=EDF or RM]" << std::endl;
+        std::cout << " <ticks> <graph file> [<algorithm>=EDF or RM or LST]" << std::endl;
         std::cout << std::flush;
         return -1;
     }
@@ -76,6 +76,10 @@ int main(int argc, char** argv) {
 	}else if(schedulingAlgorithmName == "EDF"){
 		
 		 edf = new OrcaSeer::Task::EarliestDeadlineFirst();
+		 
+	}else if(schedulingAlgorithmName == "LST"){
+		
+		 edf = new OrcaSeer::Task::LeastSlackTime();
 		 
 	}
 	
