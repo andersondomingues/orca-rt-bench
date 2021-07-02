@@ -25,33 +25,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
 #include <iostream>
-#include "RateMonotonic.hpp"
+#include "DeadlineMonotonic.hpp"
 
-namespace OrcaSeer::Task {
+namespace OrcaSeer::Task
+{
 
-RateMonotonic::RateMonotonic() {
-    // add all tasks to the tlb
-}
-<<<<<<< Updated upstream
-//
-=======
+    DeadlineMonotonic::DeadlineMonotonic()
+    {
+        // add all tasks to the tlb
+    }
 
->>>>>>> Stashed changes
-RateMonotonic::~RateMonotonic() {
-    //
-}
+    DeadlineMonotonic::~DeadlineMonotonic()
+    {
+        //
+    }
 
-// schedule -> sort tasks
-void RateMonotonic::Schedule(std::list<TaskControlBlock*>* r) {
-    // sort list of ready tasks by earliest deadline
-    r->sort([]
-        (const TaskControlBlock* e1, const TaskControlBlock* e2) {
-<<<<<<< Updated upstream
-            return e1->period < e2->period;
-=======
-            return (1/e1->period) > (1/e2->period);
->>>>>>> Stashed changes
-    });
-}
-
-}  // namespace OrcaSeer::Task
+    // schedule -> sort tasks
+    void DeadlineMonotonic::Schedule(std::list<TaskControlBlock *> *r)
+    {
+        // sort list of ready tasks by earliest deadline
+        r->sort([](const TaskControlBlock *e1, const TaskControlBlock *e2)
+                { return e1->next_deadline > e2->next_deadline; });
+    }
+} // namespace OrcaSeer::Task

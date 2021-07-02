@@ -24,34 +24,30 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 ******************************************************************************/
-#include <iostream>
-#include "RateMonotonic.hpp"
+#ifndef SIM_INCLUDE_DEADLINEMONOTONIC_HPP_
+#define SIM_INCLUDE_DEADLINEMONOTONIC_HPP_
 
-namespace OrcaSeer::Task {
+#include <string>
+#include <list>
 
-RateMonotonic::RateMonotonic() {
-    // add all tasks to the tlb
-}
-<<<<<<< Updated upstream
-//
-=======
+#include "Graph.hpp"
+#include "SchedulingAlgorithm.hpp"
+#include "TaskControlBlock.hpp"
 
->>>>>>> Stashed changes
-RateMonotonic::~RateMonotonic() {
-    //
-}
+using namespace std;
 
-// schedule -> sort tasks
-void RateMonotonic::Schedule(std::list<TaskControlBlock*>* r) {
-    // sort list of ready tasks by earliest deadline
-    r->sort([]
-        (const TaskControlBlock* e1, const TaskControlBlock* e2) {
-<<<<<<< Updated upstream
-            return e1->period < e2->period;
-=======
-            return (1/e1->period) > (1/e2->period);
->>>>>>> Stashed changes
-    });
-}
+namespace OrcaSeer::Task
+{
 
-}  // namespace OrcaSeer::Task
+    class DeadlineMonotonic : public SchedulingAlgorithm
+    {
+    public:
+        DeadlineMonotonic();
+        ~DeadlineMonotonic();
+
+        void Schedule(std::list<TaskControlBlock *> *r) override;
+    };
+
+} // namespace OrcaSeer::Task
+
+#endif // SIM_INCLUDE_DEADLINEMONOTONIC_HPP_

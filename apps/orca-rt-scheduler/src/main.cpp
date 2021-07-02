@@ -35,11 +35,14 @@
 #include "RateMonotonic.hpp"
 #include "EarliestDeadlineFirst.hpp"
 #include "LeastSlackTime.hpp"
-
+#include "RateMonotonic.hpp"
+#include "DeadlineMonotonic.hpp"
+#include "LeastLaxityFirst.hpp"
 int main(int argc, char** argv) {
     //
     int ticks;
     std::string graphFile;
+<<<<<<< Updated upstream
 	std::string schedulingAlgorithmName;
     // check on arguments
     try {
@@ -52,6 +55,19 @@ int main(int argc, char** argv) {
         std::cout << "Usage:" << std::endl;
         std::cout << "\t" << std::string(argv[0]);
         std::cout << " <ticks> <graph file> [<algorithm>=EDF or RM or LST]" << std::endl;
+=======
+    std::string schedulingAlgorithm;
+    // check on arguments
+    try {
+        if (argc != 4) throw std::runtime_error("");
+        ticks = std::stoi(argv[1], nullptr, 10);
+        graphFile = std::string(argv[2]);
+        schedulingAlgorithm = std::string(argv[3]);
+    } catch (std::exception& e) {
+        std::cout << "Usage:" << std::endl;
+        std::cout << "\t" << std::string(argv[0]);
+        std::cout << " <ticks> <graph file> <algorithm (EDF or RM or LST)>" << std::endl;
+>>>>>>> Stashed changes
         std::cout << std::flush;
         return -1;
     }
@@ -64,8 +80,9 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    std::cout << graph->ToString() << std::endl;
+    OrcaSeer::Task::SchedulingAlgorithm* edf;
 
+<<<<<<< Updated upstream
     OrcaSeer::Task::SchedulingAlgorithm* edf; 
 	
 	// Scheduling Algorthm check
@@ -83,6 +100,26 @@ int main(int argc, char** argv) {
 		 
 	}
 	
+=======
+    std::cout << graph->ToString() << std::endl;
+
+    if(schedulingAlgorithm == "EDF"){
+		edf  = new OrcaSeer::Task::EarliestDeadlineFirst();
+    std::cout << "testebenno" << std::endl;
+    }
+    if(schedulingAlgorithm == "LST"){
+		edf = new OrcaSeer::Task::LeastSlackTime();
+    }
+    if(schedulingAlgorithm == "RM"){   
+		edf  = new OrcaSeer::Task::RateMonotonic();
+    }
+     if(schedulingAlgorithm == "DM"){   
+		edf  = new OrcaSeer::Task::DeadlineMonotonic();
+    }
+     if(schedulingAlgorithm == "LSF"){
+     		edf  = new OrcaSeer::Task::LeastLaxityFirst();
+         }
+>>>>>>> Stashed changes
     OrcaSeer::Simulation::SimulationEngine* engine
         = new OrcaSeer::Simulation::SimulationEngine(graph, edf);
 
