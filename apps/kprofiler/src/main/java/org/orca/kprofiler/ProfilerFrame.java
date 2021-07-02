@@ -16,8 +16,8 @@ public class ProfilerFrame extends JInternalFrame {
 	static final int xOffset = 0, yOffset = 0;
 
 	public ProfilerFrame(String tracefile, float start_time, String res) {
-		super("Execution trace #" + (++openFrameCount) + " [" + tracefile + "]",
-			true, //resizable
+		super("Scheduler execution #" + (++openFrameCount) + " [" + tracefile + "]",
+			false, //resizable
 			true, //closable
 			true, //maximizable
 			true);//iconifiable
