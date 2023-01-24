@@ -57,8 +57,9 @@ bool KprofilerFileHandler::saveToFile(std::string filename) {
     std::ofstream file;
     file.open(filename);
 
-    if (!file.is_open()) return false;
-
+	if (!file.is_open()){ 
+	return false;
+	}
     // sort entries by starting time
     this->data.sort([]
         (const KprofilerLineData e1, const KprofilerLineData e2){
