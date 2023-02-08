@@ -1,0 +1,9 @@
+bin/*.o
+bin/*.exe
+bin/*.a
+apps/*/bin/*.o
+apps/*/bin/*.exe
+apps/*/bin/*.a
+.cproject
+.project
+.settings
