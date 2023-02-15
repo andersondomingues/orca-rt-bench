@@ -36,6 +36,9 @@ class GraphNode:
     def __eq__(self: "GraphNode", target: "GraphNode"):
         return self._data == target._data
 
+    def __str__(self: "GraphNode"):
+        return str(self._data)
+
 
 class GraphEdge:
     def __init__(self: "GraphEdge", nfrom: GraphNode, nto: GraphNode, data: any):
@@ -85,11 +88,16 @@ class Graph:
         self._edges.remove(edge)
 
     def __str__(self: "Graph"):
-        ss = "NODES ========================================\n"
-        for n in self._nodes:
-            ss += str(n) + "\n"
-        ss += "EDGES ========================================\n"
-        for e in self._edges:
-            ss += str(e) + "\n"
-        ss += "==============================================\n"
+        ss = "{nodes: "
+        if len(self._nodes) == 0:
+            ss += "None\n"
+        else:
+            ss += "[" + ", ".join([str(x) for x in self._nodes]) + "]"
+
+        ss += ", edges: "
+        if len(self._edges) == 0:
+            ss += "None\n"
+        else:
+            ss += "[" + ",".join([str(x) for x in self._edges]) + "]"
+        ss += " }"
         return ss

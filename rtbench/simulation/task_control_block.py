@@ -49,7 +49,7 @@ class TaskControlBlock:
         self._next_deadline = self._deadline
 
     def __str__(self: "TaskControlBlock"):
-        ss = "[" + self._id + "] " + self._name
+        ss = "[" + str(self._id) + "] " + self._name
         ss += ", p:" + str(self._period)
         ss += ", c:" + str(self._current_capacity) + "/" + str(self._capacity)
         ss += ", d:" + str(self._next_deadline) + "/" + str(self._deadline)

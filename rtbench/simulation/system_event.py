@@ -33,15 +33,21 @@ class SystemEventType(Enum):
 
 
 class SystemEvent:
-    def __init__(self: "SystemEvent", time: int, type: SystemEventType):
+    def __init__(self: "SystemEvent", time: int, type: SystemEventType) -> None:
         self._time = time
         self._type = type
 
-    def __lt__(self: "SystemEvent", target: "SystemEvent"):
+    def __lt__(self: "SystemEvent", target: "SystemEvent") -> bool:
         return self._time > target._time
 
-    def __eq__(self: "SystemEvent", target: "SystemEvent"):
+    def __eq__(self: "SystemEvent", target: "SystemEvent") -> bool:
         return self._time == target._time and self._type == target.type
 
-    def __str__(self: "SystemEvent"):
+    def __str__(self: "SystemEvent") -> str:
         return str(self._time) + str(self._type)
+
+    def get_time(self: "SystemEvent") -> int:
+        return self._time
+
+    def get_type(self: "SystemEvent") -> SystemEventType:
+        return self._type

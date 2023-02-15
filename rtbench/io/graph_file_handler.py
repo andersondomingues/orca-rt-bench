@@ -1,4 +1,4 @@
-'''
+"""
 This file is part of project ORCA. More information on the project
 can be found at the following repositories at GitHub's website.
 
@@ -23,11 +23,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-'''
+"""
 from enum import Enum
 from rtbench.modeling.graph import Graph, GraphEdge, GraphNode
-
-# define ENDL '\n'
 
 
 class GraphParseState(Enum):
@@ -39,7 +37,6 @@ class GraphParseState(Enum):
 
 
 def parse_graph_from_file(file_name: str) -> Graph:
-
     NODE_HEADER = "[nodes]"
     EDGE_HEADER = "[edges]"
 
@@ -49,7 +46,6 @@ def parse_graph_from_file(file_name: str) -> Graph:
         state: GraphParseState = GraphParseState.IGNORE
 
         line: str
-        ss: str
 
         while True:
             line = file.readline()
@@ -57,36 +53,48 @@ def parse_graph_from_file(file_name: str) -> Graph:
             if not line:
                 break
 
-            if line[0] == '#' or line[0] == '\n' or line == "":
+            if line[0] == "#" or line[0] == "\n" or line == "":
                 continue
 
-            if line == NODE_HEADER:
+            if line.startswith(NODE_HEADER):
                 state = GraphParseState.PARSE_NODES
                 continue
-            elif line == EDGE_HEADER:
+            elif line.startswith(EDGE_HEADER):
                 state = GraphParseState.PARSE_EDGES
                 continue
 
-            if state in [GraphParseState.IGNORE,
-                         GraphParseState.FIND_NODE_HEADER,
-                         GraphParseState.FIND_EDGE_HEADER]:
+            if state in [
+                GraphParseState.IGNORE,
+                GraphParseState.FIND_NODE_HEADER,
+                GraphParseState.FIND_EDGE_HEADER,
+            ]:
                 pass
-            elif state == GraphParseState.PARSE_NODES:
-                lline = line.split('t')
-                lline.remove('')
 
-                graph.add_node(GraphNode({
-                    "id" : lline[0],
-                    "name" : lline[0],
-                    "period" : lline[0],
-                    "capacity" : lline[0],
-                    "deadline" : lline[0]
-                }))
+            elif state == GraphParseState.PARSE_NODES:
+                lline = (
+                    line.replace("\n", "")
+                    .replace("\t", "")
+                    .replace("\r", "")
+                    .split(" ")
+                )
+
+                while "" in lline:
+                    lline.remove("")
+
+                node = GraphNode(
+                    {
+                        "id": int(lline[0]),
+                        "name": lline[0],
+                        "period": int(lline[0]),
+                        "capacity": int(lline[0]),
+                        "deadline": int(lline[0]),
+                    }
+                )
+                graph.add_node(node)
 
             elif state == GraphParseState.PARSE_EDGES:
-
-                lline = line.split('\t')
-                lline.remove('')
+                lline = line.split("\t")
+                lline.remove("")
 
                 node_from: GraphNode
                 node_to: GraphNode

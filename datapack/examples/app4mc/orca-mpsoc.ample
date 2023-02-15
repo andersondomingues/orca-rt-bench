@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ample:SystemFamily xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ample="http://itea.amalthea.org/variability/0.7.0/ample" name="orca-mpsoc">
-  <featureModels/>
-  <hardwareVariabilityModels>
-    <hwConfigs name="NoC-dimension-X"/>
-    <hwConfigs name="NoC-dimension-Y"/>
-  </hardwareVariabilityModels>
-</ample:SystemFamily>

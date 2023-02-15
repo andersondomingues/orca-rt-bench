@@ -25,10 +25,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """
 from __future__ import annotations
-from rtbench.scheduling_algorithm import SchedulingAlgorithm
+from rtbench.scheduling.scheduling_algorithm import SchedulingAlgorithm
 from rtbench.simulation.task_control_block import TaskControlBlock
 
 
 class LeastSlackTime(SchedulingAlgorithm):
-    def schedule(r: list[TaskControlBlock]):
+    def schedule(self: "LeastSlackTime", r: list[TaskControlBlock]):
         sorted(r, key=lambda e: e._capacity - e._current_capacity, reverse=False)

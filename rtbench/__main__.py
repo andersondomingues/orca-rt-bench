@@ -1,4 +1,4 @@
-'''
+"""
 This file is part of project ORCA. More information on the project
 can be found at the following repositories at GitHub's website.
 
@@ -22,43 +22,57 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
-'''
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+"""
 
 from __future__ import annotations
 import sys
 
-from lib.terminal import error
 from rtbench.modeling.graph import Graph
 from rtbench.io.graph_file_handler import parse_graph_from_file
+from rtbench.io.terminal import info
+from rtbench.simulation.single_core_engine import SingleCoreEngine
+from rtbench.scheduling.deadline_monotonic import DeadlineMonotonic
+from rtbench.scheduling.earliest_deadline_first import EarliestDeadlineFirst
+from rtbench.scheduling.least_laxity_first import LeastLaxityFirst
+from rtbench.scheduling.least_slack_time import LeastSlackTime
+from rtbench.scheduling.rate_monotonic import RateMonotonic
+
 
 def main(args: list[str]):
-    
     # make sure we have all the arguments
-    if len(args) != 4:
-        error("Usage:")
-        error("python3 -m rtbench <ticks> <app> <algorithm>")
-        error("*ticks*: the number of time units to simulate")
-        error("*app*: a file name containing an app task graph")
-        error("*algorithm*: one of EDF, RM, LST, DM, LLF")
-        
-    ticks: int = args[0]
+    if len(args) != 3:
+        print("Usage: python3 -m rtbench <TICKS> <APPGRAPH> <ALGORITHM>")
+        print(
+            "Produces a simulation trace of TICKS length for the given APPGRAPH, "
+            "applying the ALGORITHM scheduling."
+        )
+        exit(0)
+
+    ticks: int = int(args[0])
     graph_file: str = args[1]
-    algorithm: str = args[1]
+    algorithm: str = args[2]
+
+    info(f"** Ticks: {ticks}")
+    info(f"** Graph: {graph_file}")
+    info(f"** Algorithm: {algorithm}")
 
     graph: Graph = parse_graph_from_file(graph_file)
 
-    algorithms = (
-        "EDF" : EarliestDeadlineFirst,
-        "RM"  : RateMonotonic,
-        "DM"  : DeadlineMonotonic,
-        "LST" : LeastSlacktimeFirst,
-        "LLF" : LeastLaxityFirst
-    )
+    info(f"** Parsed data: {graph}")
+
+    algorithms = {
+        "EDF": EarliestDeadlineFirst,
+        "RM": RateMonotonic,
+        "DM": DeadlineMonotonic,
+        "LST": LeastSlackTime,
+        "LLF": LeastLaxityFirst,
+    }
 
     alg_class = algorithms[algorithm]
     engine = SingleCoreEngine(graph, alg_class)
     engine.simulate(ticks)
+
 
 if __name__ == "__main__":
     argv: list[str] = sys.argv[1:]

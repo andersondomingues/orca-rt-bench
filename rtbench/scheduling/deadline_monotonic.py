@@ -1,4 +1,4 @@
-'''
+"""
 This file is part of project ORCA. More information on the project
 can be found at the following repositories at GitHub's website.
 
@@ -22,29 +22,14 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
-'''
-#include <iostream>
-#include "DeadlineMonotonic.hpp"
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+"""
+from __future__ import annotations
+from rtbench.scheduling.scheduling_algorithm import SchedulingAlgorithm
+from rtbench.simulation.task_control_block import TaskControlBlock
 
-namespace OrcaSeer::Task
-{
 
-    DeadlineMonotonic::DeadlineMonotonic()
-    {
-        // add all tasks to the tlb
-    }
-
-    DeadlineMonotonic::~DeadlineMonotonic()
-    {
-        //
-    }
-
-    // schedule -> sort tasks
-    void DeadlineMonotonic::Schedule(std::list<TaskControlBlock *> *r)
-    {
-        // sort list of ready tasks by earliest deadline
-        r->sort([](const TaskControlBlock *e1, const TaskControlBlock *e2)
-                { return e1->next_deadline > e2->next_deadline; });
-    }
-} // namespace OrcaSeer::Task
+class DeadlineMonotonic(SchedulingAlgorithm):
+    @classmethod
+    def schedule(self: "DeadlineMonotonic", r: list[TaskControlBlock]):
+        sorted(r, key=lambda e: e.deadline, reverse=False)

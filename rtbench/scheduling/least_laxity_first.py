@@ -1,4 +1,4 @@
-'''
+"""
 This file is part of project ORCA. More information on the project
 can be found at the following repositories at GitHub's website.
 
@@ -22,29 +22,13 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
-'''
-#include <iostream>
-#include "LeastLaxityFirst.hpp"
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+"""
+from __future__ import annotations
+from rtbench.scheduling.scheduling_algorithm import SchedulingAlgorithm
+from rtbench.simulation.task_control_block import TaskControlBlock
 
-namespace OrcaSeer::Task
-{
 
-    LeastLaxityFirst::LeastLaxityFirst()
-    {
-        // add all tasks to the tlb
-    }
-
-    LeastLaxityFirst::~LeastLaxityFirst()
-    {
-        //
-    }
-
-    // schedule -> sort tasks
-    void LeastLaxityFirst::Schedule(std::list<TaskControlBlock *> *r)
-    {
-        // sort list of ready tasks by latest deadline
-        r->sort([](const TaskControlBlock *e1, const TaskControlBlock *e2)
-                { return (e1->deadline - e1->period) < (e2->deadline - e2->period); });
-    }
-} // namespace OrcaSeer::Task
+class LeastLaxityFirst(SchedulingAlgorithm):
+    def schedule(self: "LeastLaxityFirst", r: list[TaskControlBlock]):
+        sorted(r, key=lambda e: (e._deadline - e._period), reverse=False)

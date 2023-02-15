@@ -1,4 +1,4 @@
-'''
+"""
 This file is part of project ORCA. More information on the project
 can be found at the following repositories at GitHub's website.
 
@@ -23,23 +23,23 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-'''
+"""
 from queue import PriorityQueue
 
-from lib.terminal import warn, error, info  # debug, header
+from rtbench.io.terminal import warn, error, info  # debug, header
 from rtbench.modeling.graph import Graph
-from rtbench.scheduling_algorithm import SchedulingAlgorithm
+from rtbench.scheduling.scheduling_algorithm import SchedulingAlgorithm
 from rtbench.simulation.task_control_block import TaskControlBlock
 from rtbench.simulation.system_event import SystemEvent, SystemEventType
 
 
-class SingleCoreEngine():
-
+class SingleCoreEngine:
     SCHED_IRQ_PERIOD = 20
 
-    def __init__(self: "SingleCoreEngine", task_graph: Graph,
-                 algorithm: SchedulingAlgorithm):
-        self._system_time = 0
+    def __init__(
+        self: "SingleCoreEngine", task_graph: Graph, algorithm: SchedulingAlgorithm
+    ):
+        self._system_time: int = 0
         self._queue = PriorityQueue()
         self._running = []
         self._blocked = []
@@ -47,33 +47,30 @@ class SingleCoreEngine():
 
         # populate blocked list with tasks from the graph
         for n in task_graph.get_nodes():
-
             tlb = TaskControlBlock(
-                n.get_data().get_id(),
-                n.get_data().get_name(),
-                n.get_data().get_period(),
-                n.get_data().get_capacity(),
-                n.get_data().get_deadline()
+                n.get_data()["id"],
+                n.get_data()["name"],
+                n.get_data()["period"],
+                n.get_data()["capacity"],
+                n.get_data()["deadline"],
             )
             self._blocked.append(tlb)
 
         self._algorithm = algorithm
 
     def simulate(self: "SingleCoreEngine", time: int):
-
-        irq_event : SystemEvent = SystemEvent(0, SystemEventType.SCHEDULER_IRQ)
-        self._queue.push(irq_event)
+        irq_event: SystemEvent = SystemEvent(0, SystemEventType.SCHEDULER_IRQ)
+        self._queue.put(irq_event, 0)
 
         iterations = 0
         start_time = 0
 
-        # open file >>>>
-        while (self._system_time < time):
+        print(repr(self._queue.queue))
 
-            top_event = self._queue.top()
-            self._queue.pop()
+        while self._system_time < time:
+            top_event: SystemEvent = self._queue.get()
 
-            self._elapsed_time = top_event.time - self._system_time
+            self._elapsed_time = top_event._time - self._system_time
             self._system_time += self._elapsed_time
 
             # warning
@@ -88,16 +85,16 @@ class SingleCoreEngine():
             self.schedule(self._algorithm)
 
             # Next event is the scheduler interruption
-            if top_event.type == SystemEventType.SCHEDULER_IRQ:
+            if top_event.get_type() == SystemEventType.SCHEDULER_IRQ:
                 # remove all events from the simulation queue; since the
                 # scheduler_irq has been removed, only the event for the
                 # running task remains
-                while len(self._queue) > 0:
-                    self._queue.pop()
+                while self._queue.qsize() > 0:
+                    self._queue.get()
 
                 # register the interruption
-                irq_event._time = self._system_time + self._SCHED_IRQ_PERIOD
-                self._queue.push(irq_event)
+                irq_event._time = self._system_time + self.SCHED_IRQ_PERIOD
+                self._queue.put(irq_event, irq_event._time)
 
             # register next task finish within the simulation
             next_task = self._running[0]
@@ -109,14 +106,19 @@ class SingleCoreEngine():
             # slack time
             if next_task is not None:
                 top_event._time = self._system_time + (
-                    next_task._capacity - next_task._current_capacity)
+                    next_task._capacity - next_task._current_capacity
+                )
 
                 top_event.type = SystemEventType.TASK_FINISHED_IRQ
-                self._queue.push(top_event)
+                self._queue.put(top_event, top_event.get_time())
                 warn("running task")
 
-                info(iterations, next_task._period, next_task._capacity,
-                     next_task._deadline)
+                info(
+                    iterations,
+                    next_task._period,
+                    next_task._capacity,
+                    next_task._deadline,
+                )
             else:
                 warn("slack time")
 
@@ -124,7 +126,6 @@ class SingleCoreEngine():
             return self._system_time
 
     def schedule(self: "SingleCoreEngine", algorithm: SchedulingAlgorithm):
-
         for t in self._running:
             # add elapsed time to current capacity of the task
             t._ccurrent_capacity += self._elapsed_time
@@ -147,8 +148,8 @@ class SingleCoreEngine():
 
         # move tasks from blocked to the ready queue
         for t in self._blocked:
-            if t._release_time <= self._systemTime:
-                self._ready.push(t)
+            if t._release_time <= self._system_time:
+                self._ready.append(t)
                 freed.append(t)
 
         # remove freed tasks from blocked list
@@ -170,7 +171,6 @@ class SingleCoreEngine():
         return self._system_time
 
     def print_task_list(self: "SingleCoreEngine"):
-
         # print lists
         print("==============================================")
         print("----- running")
