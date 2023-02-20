@@ -30,6 +30,7 @@
 
 ## Collaborators
 
-- João Benno, [his repository](https://github.com/bennoXav)
-- Lucas Damo, [his repository](https://github.com/LucasDamo22)
+- [Anderson Domingues](https://github.com/andersondomingues)
+- [João Benno](https://github.com/bennoXav)
+- [Lucas Damo](https://github.com/LucasDamo22)
 
